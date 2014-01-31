@@ -6,8 +6,7 @@ work cooperatively. These include:
 * Tcl and Tk -- Tool Command Language and its GUI toolkit Tk.
   Distributed under the terms of its own BSD-style license.
 * Several 3rd-party extensions to Tcl/Tk: (parts of) Tcllib,
-  BWidget, tls, tcludp, tclmore, ztcl, tclWinidle, Tkinactive,
-  Winico, Snack, TkImg, Memchan, Trf, vfs.
+  BWidget, tls, tcludp, Winico, Snack, TkImg, Memchan, Trf, vfs.
 * Some extensions rely on certain free software libraries
   (linked either statically or dynamically): OpenSSL and zlib.
 
@@ -27,7 +26,7 @@ which are not part of the software packages mentioned before.
 They are: the script for generation of the Tkabber-Pack installer,
 pertaining image files and all other miscellaneous support files.
 The source code of Tkabber-Pack is available on the Web
-at http://tkabber.jabber.ru/files/tkabber-pack/tkabber-pack-0.11.1.tar.bz2
+at http://tkabber.jabber.ru/files/tkabber-pack/tkabber-pack-1.0.zip
 
 By using and/or redistributing Tkabber-Pack you agree
 with all pertaining licenses.
