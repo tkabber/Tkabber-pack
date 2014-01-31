@@ -1,0 +1,33 @@
+This software package (called "Tkabber-Pack" hereinbelow)
+aggregates several pieces of free software intended to
+work cooperatively. These include:
+* Tkabber -- XMPP (Jabber) client. Distributed under the
+  terms of GNU General Public License.
+* Tcl and Tk -- Tool Command Language and its GUI toolkit Tk.
+  Distributed under the terms of its own BSD-style license.
+* Several 3rd-party extensions to Tcl/Tk: (parts of) Tcllib,
+  BWidget, tls, tcludp, tclmore, ztcl, tclWinidle, Tkinactive,
+  Winico, Snack, TkImg, Memchan, Trf, vfs.
+* Some extensions rely on certain free software libraries
+  (linked either statically or dynamically): OpenSSL and zlib.
+
+Full texts of the licenses of aggregated pieces of free
+software will be available after installation of this package
+under the "doc\licenses" directory located under the chosed
+installation directory.
+
+Tkabber-Pack itself is distributed under the terms of
+GNU General Public License. Its full text is available
+in the file named "GNU_GPL.txt" which will be located
+in the aforementioned "doc\licenses" directory after
+installation of this package. It can also be found the Web
+at http://www.gnu.org/licenses/licenses.html#GPL
+This license covers all the files comprising the Tkabber-Pack,
+which are not part of the software packages mentioned before.
+They are: the script for generation of the Tkabber-Pack installer,
+pertaining image files and all other miscellaneous support files.
+The source code of Tkabber-Pack is available on the Web
+at http://tkabber.jabber.ru/files/tkabber-pack/tkabber-pack-0.11.1.tar.bz2
+
+By using and/or redistributing Tkabber-Pack you agree
+with all pertaining licenses.

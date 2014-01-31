@@ -1,0 +1,52 @@
+* If you haven't used Tkabber before, please read its "Quick Help"
+  provided in the "Help" submenu of the Tkabber's main menu. It contains
+  description of the most frequently used keyboard shortcuts.
+
+* Tkabber-Pack contains the set of standard plugins for Tkabber.
+
+  To enable a plugin navigate to the "Services" main menu entry
+  and activate "Add/remove Plugins" item. You will be presented
+  with a list of available standard plugins and their short
+  descriptions. Each plugin has a checkbox attached to its name.
+  Check the plugins you want to install, uncheck those you want
+  to uninstall, then press "Apply changes". Restart Tkabber for
+  the changes to take effect.
+
+  The other way to install a plugin is to do this manually.
+  All standard plugins can be found in the "Plugins" subdirectory
+  of the directory in which Tkabber-Pack was just installed.
+  You can open it using the "Open Plugins Folder" item of the
+  Tkabber's start menu. To manually install a plugin copy its
+  directory (as a whole! not files from it) under the
+  %APPDATA%\Tkabber\plugins directory.
+  To disable plugin, remove that plugin directory.
+  %APPDATA% is your "application data" special system folder.
+  On Windows XP it's usually
+  "C:\Program Files\Documents and Settings\USERNAME\Application Data"
+  where USERNAME is the login name you're using.
+
+* If you have any problems with Tkabber, at first read the
+  "Installation and operation guide" available at the
+  Tkabber's Start menu folder.
+  If it doesn't help don't hesitate to visit resources listed
+  below in the order of enumeration:
+  1. Official Tkabber Wiki: http://tkabber.jabe.ru
+  2. Official Tkabber chatroom: xmpp:tkabber@conference.jabber.ru
+    (English, Russian, Spanish are OK but feel free to ask using
+     whatever language you speak, someone might help).
+  3. Tkabber forums at http://tkabber.jabber.ru/forum
+
+  When asking for help please provide all possible details about
+  your environment (version of Tkabber and its package, plugins
+  installed, OS version, etc) and provide descriptive report
+  about your problem.
+
+  This distribution is called
+  "official Tkabber-Pack 0.11.1, revision 1".
+
+* Tkabber-Pack 0.11.1 was built by Konstantin Khomoutov
+  (khomoutov@gmail.com, xmpp:kostix@007spb.ru)
+  using InnoSetup (http://www.jrsoftware.org/isinfo.php)
+  and ISTool (http://www.istool.org).
+  Artwork and icons were created by Artem Bannikov
+  (xmpp:artstyle@plotinka.ru).

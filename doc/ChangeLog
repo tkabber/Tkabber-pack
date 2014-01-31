@@ -1,0 +1,35 @@
+30-10-2007  Konstantin Khomoutov <flatworm@users.sourceforge.net>
+
+	* Re-added tkinactive, now at version 0.4 which checks the
+	  OS version and fails to load if the Win32 API is not
+	  support SendInput() function. This should allow tclWinidle
+	  to load on such platforms (Win9x, WinNT < SP 3.0).
+
+	* Pack version bumped to r2.
+
+
+29-10-2007  Konstantin Khomoutov <flatworm@users.sourceforge.net>
+
+	* Packaged 0.10.1-beta2.
+
+	* Added new packages:
+	  * Tkinactive -- idle tracking facilities using W2k+ Win32 API features.
+	  * Memchan, vfs -- provide for handling of JISP archives.
+	  License files updated.
+
+	* Trf 2.1p2 built from sources to work with zlib from this package.
+
+	* "Info after" file is now installed as a piece of documentation
+	  and entitled "Quick Tips" in the icons folder.
+
+
+11-10-2007  Konstantin Khomoutov <flatworm@users.sourceforge.net>
+
+	* Added missing md4 and des packages to tcllib (this should
+	  make NTLM proxy auth to start working).
+
+	* Tcllib packages were re-added from a clean installation of
+	  Tcllib so that some unnecessery files were wiped out.
+
+	* Marked as "rev.2".
+
