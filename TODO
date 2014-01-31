@@ -1,8 +1,0 @@
-* Ideally we should have a small file containing the current
-  "revision" of the pack and have this revision applied to
-  both the installer script and the bootstrap script to
-  get consistent version info.
-
-* Re-think the package licensing information -- it's not clear
-  whether it should really be GPL'ed.
-
