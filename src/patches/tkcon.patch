@@ -1,0 +1,94 @@
+--- tkcon.tcl.orig	Sun Apr  6 13:08:45 2008
++++ tkcon.tcl	Sun Apr  6 13:09:03 2008
+@@ -709,6 +709,9 @@
+ 	if {![font metrics $font -fixed]} {
+ 	    $con configure -font tkconfixed
+ 	}
++	if {$::tcl_version >= 8.5} {
++	font configure TkFixedFont -size 9
++	}
+     } else {
+ 	$con configure -font tkconfixed
+     }
+@@ -1456,6 +1459,13 @@
+ 		-command ::tkcon::Destroy
+ 	$m add command -label "Clear Console"	-underline 1 -accel Ctrl-l \
+ 		-command { clear; ::tkcon::Prompt }
++	if {$::tcl_version >= 8.5} {
++		$m add separator
++		$m add command -label "Increase font size" -accel Ctrl-+ \
++			-command ::tkcon::IncreaseFontSize
++		$m add command -label "Decrease font size" -accel Ctrl-- \
++			-command ::tkcon::DecreaseFontSize
++	}
+ 	if {[string match unix $tcl_platform(platform)]} {
+ 	    $m add separator
+ 	    $m add command -label "Make Xauth Secure" -und 5 \
+@@ -1952,6 +1962,38 @@
+     }
+ }
+ 
++#
++# ::tkcon::IncreaseFontSize --
++#
++#   This increases the console font size by 1
++#
++# Arguments:
++#   none
++# Results:
++#   Returns nothing
++#
++if {$::tcl_version >= 8.5} {
++	proc ::tkcon::IncreaseFontSize {} {
++		global TkFixedFont
++		font configure TkFixedFont -size [expr [font configure TkFixedFont -size] + 1]
++	}
++}
++#
++# ::tkcon::DecreaseFontSize --
++#
++#   This decreases the console font size by 1
++#
++# Arguments:
++#   none
++# Results:
++#   Returns nothing
++#
++if {$::tcl_version >= 8.5} {
++	proc ::tkcon::DecreaseFontSize {} {
++		global TkFixedFont
++		font configure TkFixedFont -size [expr [font configure TkFixedFont -size] - 1]
++	}
++}
+ # ::tkcon::XauthSecure --
+ #
+ #   This removes all the names in the xhost list, and secures
+@@ -5043,6 +5085,17 @@
+ 	bind TkConsole $key {}
+     }
+ 
++	if {$::tcl_version >= 8.5} {
++		foreach {ev key} [subst -nocommand -noback {
++		<<TkCon_IncreaseFontSize>>	<Control-Key-plus>
++		<<TkCon_DecreaseFontSize>>	<Control-Key-minus>
++		}] {
++		event add $ev $key
++		## Make sure the specific key won't be defined
++		bind TkConsole $key {}
++		}
++	}
++	
+     ## Make the ROOT bindings
+     bind $PRIV(root) <<TkCon_Exit>>	exit
+     bind $PRIV(root) <<TkCon_New>>	{ ::tkcon::New }
+@@ -5053,6 +5106,10 @@
+     bind $PRIV(root) <<TkCon_About>>	{ ::tkcon::About }
+     bind $PRIV(root) <<TkCon_Help>>	{ ::tkcon::Help }
+     bind $PRIV(root) <<TkCon_Find>>	{ ::tkcon::FindBox $::tkcon::PRIV(console) }
++	if {$::tcl_version >= 8.5} {
++		bind $PRIV(root) <<TkCon_IncreaseFontSize>> { ::tkcon::IncreaseFontSize }
++		bind $PRIV(root) <<TkCon_DecreaseFontSize>> { ::tkcon::DecreaseFontSize }
++	}
+     bind $PRIV(root) <<TkCon_Slave>>	{
+ 	::tkcon::Attach {}
+ 	::tkcon::RePrompt "\n" [::tkcon::CmdGet $::tkcon::PRIV(console)]

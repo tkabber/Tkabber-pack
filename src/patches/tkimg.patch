@@ -1,0 +1,11 @@
+--- Makefile.in.orig	2013-11-22 02:03:12 +0400
++++ Makefile.in	2014-02-13 14:20:02 +0400
+@@ -118,7 +118,7 @@
+ 	mkdir -p $(MAN_INSTALL_DIR)/mann
+ 	for i in $(srcdir)/doc/*.man ; \
+ 	do	\
+-		dtplite -ext n -o $(MAN_INSTALL_DIR)/mann nroff $$i ; \
++		$(DTPLITE) -ext n -o $(MAN_INSTALL_DIR)/mann nroff $$i ; \
+ 	done
+ 
+ collate: all

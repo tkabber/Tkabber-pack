@@ -1,0 +1,22 @@
+--- generic/jkFormatMP3.c.orig	Thu Apr 26 09:31:49 2007
++++ generic/jkFormatMP3.c	Thu Apr 26 09:32:36 2007
+@@ -31,7 +31,7 @@
+ #include <string.h>
+ #define FRAS2(is,a) ((is) > 0 ? t_43[(is)]*(a):-t_43[-(is)]*(a))
+ #define MAXFRAMESIZE 2106  /* frame size starting at header */
+-#define roundf(x) (floor((x)+(float )0.5f))
++//#define roundf(x) (floor((x)+(float )0.5f))
+ static char *gblOutputbuf;
+ static char *gblReadbuf;
+ static int gblBufind = 0;
+--- generic/jkSound.h.orig	2014-02-13 12:53:58 +0400
++++ generic/jkSound.h	2014-02-13 12:54:05 +0400
+@@ -603,7 +603,7 @@
+ 
+ extern void SnackPauseAudio();
+ 
+-#if TCL_MAJOR_VERSION == 8 && TCL_MINOR_VERSION < 4
++#if TCL_MAJOR_VERSION == 8 && TCL_MINOR_VERSION < 7
+ #define TCL_SEEK Tcl_Seek
+ #define TCL_TELL Tcl_Tell
+ #else

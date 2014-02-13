@@ -1,0 +1,73 @@
+# WinTclTk common.mak
+# Copyright (c) 2006-2008 Martin Matuska
+#
+# $Id$
+#
+# unzip
+
+COMMONBUILD?=	$(SRCDIR)/build_c
+
+$(COMMONBUILD):
+	@mkdir -p $(COMMONBUILD)
+
+# openssl
+fetch-openssl: ${DISTFILES} ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz 
+${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz:
+	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
+
+extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/openssl-${OPENSSL_VERSION}
+$(COMMONBUILD)/openssl-${OPENSSL_VERSION}:
+	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/openssl-${OPENSSL_VERSION}.tar.gz.md5 || exit 1
+	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz >/dev/null 2>&1
+
+configure-openssl: extract-openssl $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done
+$(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done:
+	@[ -x "${PERL}" ] || ( echo "$(MESSAGE_OPENSSL_PERL)"; exit 1 ) 
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && Configure --prefix=${PREFIX} mingw shared threads && touch configure.done 
+
+build-openssl: configure-openssl $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll 
+$(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll:
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make && strip *.dll
+
+install-openssl: build-openssl ${PREFIX}/bin/libeay32.dll
+${PREFIX}/bin/libeay32.dll: 
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make install MKDIR="mkdir -p" INSTALLTOP="$(PREFIX)"
+	@cp $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/LICENSE ${PREFIX}/lib/OpenSSL.license
+
+uninstall-openssl:
+	@-cd ${PREFIX} && rm -rf bin/openssl.exe bin/libeay32.dll bin/ssleay32.dll include/openssl lib/libssl*.a lib/libcrypto*.a 
+
+clean-openssl:
+	@-cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make clean
+
+distclean-openssl:
+	@-rm -rf $(COMMONBUILD)/openssl-${OPENSSL_VERSION}
+
+# tkcon
+fetch-tkcon: $(DISTFILES) $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz
+$(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz:
+	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
+	@cd $(DISTFILES) && $(WGET) "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tkcon/tkcon-${TKCON_VERSION}.tar.gz"
+
+extract-tkcon: fetch-tkcon $(COMMONBUILD) $(COMMONBUILD)/tkcon-$(TKCON_VERSION)
+$(COMMONBUILD)/tkcon-$(TKCON_VERSION):
+	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tkcon-$(TKCON_VERSION).tar.gz.md5 || exit 1
+	@cd $(COMMONBUILD) && tar xfz $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz
+	@cd $(COMMONBUILD)/tkcon-$(TKCON_VERSION) && patch -p0 < $(PATCHDIR)/tkcon.patch
+
+configure-tkcon: extract-tkcon
+build-tkcon: configure-tkcon
+
+install-tkcon: build-tkcon $(PREFIX)/lib/tkcon$(TKCON_VERSION)/pkgIndex.tcl
+$(PREFIX)/lib/tkcon$(TKCON_VERSION)/pkgIndex.tcl:
+	@mkdir -p $(PREFIX)/lib/tkcon$(TKCON_VERSION)
+	@cd $(COMMONBUILD)/tkcon-$(TKCON_VERSION) && cp -Rp tkcon.tcl pkgIndex.tcl README.txt Changelog docs $(PREFIX)/lib/tkcon$(TKCON_VERSION)
+
+uninstall-tkcon:
+	@-cd $(PREFIX)/lib && rm -rf tkcon$(TKCON_VERSION)
+
+clean-tkcon:
+
+distclean-tkcon:
+	@-rm -rf $(COMMONBUILD)/tkcon-$(TKCON_VERSION)

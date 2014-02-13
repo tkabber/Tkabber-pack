@@ -1,0 +1,17 @@
+diff --git a/Makefile.in b/Makefile.in
+index 6762f68..39db441 100755
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -289,10 +289,10 @@ VPATH = $(srcdir):$(srcdir)/generic:$(srcdir)/unix:$(srcdir)/win:$(srcdir)/doc
+ 
+ .SUFFIXES: .man .html .n
+ .man.html:
+-	mpexpand html "`@CYGPATH@ $<`" "$@"
++	$(MPEXPAND) html "`@CYGPATH@ $<`" "$@"
+ 
+ .man.n:
+-	mpexpand nroff "`@CYGPATH@ $<`" "$@"
++	$(MPEXPAND) nroff "`@CYGPATH@ $<`" "$@"
+ 
+ #========================================================================
+ # Create the pkgIndex.tcl file.

@@ -1,0 +1,94 @@
+--- generic/zlib.c.orig	Fri Apr 13 10:02:12 2007
++++ generic/zlib.c	Fri Apr 13 10:02:17 2007
+@@ -12,7 +12,7 @@
+ #include "transformInt.h"
+ 
+ #ifdef __WIN32__
+-#define Z_LIB_NAME "zlib.dll"
++#define Z_LIB_NAME "zlib1.dll"
+ #endif
+ 
+ #ifndef Z_LIB_NAME
+--- generic/sha/sha.c.orig	Fri Apr 13 10:05:37 2007
++++ generic/sha/sha.c	Fri Apr 13 10:05:47 2007
+@@ -57,7 +57,7 @@
+ SHA_INFO *sha_info;
+ {
+     int i;
+-    UINT32 temp, A, B, C, D, E, W[80];
++    UINT32W temp, A, B, C, D, E, W[80];
+ 
+     for (i = 0; i < 16; ++i) {
+ 	W[i] = sha_info->data[i];
+@@ -119,12 +119,12 @@
+ /* change endianness of data */
+ 
+ static void byte_reverse(buffer, count)
+-UINT32 *buffer; int count;
++UINT32W *buffer; int count;
+ {
+     int i;
+     BYTE ct[4], *cp;
+ 
+-    count /= sizeof(UINT32);
++    count /= sizeof(UINT32W);
+     cp = (BYTE *) buffer;
+     for (i = 0; i < count; ++i) {
+ 	ct[0] = cp[0];
+@@ -135,7 +135,7 @@
+ 	cp[1] = ct[2];
+ 	cp[2] = ct[1];
+ 	cp[3] = ct[0];
+-	cp += sizeof(UINT32);
++	cp += sizeof(UINT32W);
+     }
+ }
+ 
+@@ -160,11 +160,11 @@
+ void sha_update(sha_info, buffer, count)
+ SHA_INFO *sha_info; BYTE *buffer; int count;
+ {
+-    if ((sha_info->count_lo + ((UINT32) count << 3)) < sha_info->count_lo) {
++    if ((sha_info->count_lo + ((UINT32W) count << 3)) < sha_info->count_lo) {
+ 	++sha_info->count_hi;
+     }
+-    sha_info->count_lo += (UINT32) count << 3;
+-    sha_info->count_hi += (UINT32) count >> 29;
++    sha_info->count_lo += (UINT32W) count << 3;
++    sha_info->count_hi += (UINT32W) count >> 29;
+     while (count >= SHA_BLOCKSIZE) {
+ 	memcpy(sha_info->data, buffer, SHA_BLOCKSIZE);
+ #ifdef LITTLE_ENDIAN
+@@ -183,7 +183,7 @@
+ SHA_INFO *sha_info;
+ {
+     int count;
+-    UINT32 lo_bit_count, hi_bit_count;
++    UINT32W lo_bit_count, hi_bit_count;
+ 
+     lo_bit_count = sha_info->count_lo;
+     hi_bit_count = sha_info->count_hi;
+--- generic/sha/sha.h.orig	Fri Apr 13 10:05:39 2007
++++ generic/sha/sha.h	Fri Apr 13 10:05:51 2007
+@@ -18,7 +18,7 @@
+ #ifdef _WIN32
+ #	pragma warning ( disable : 4142 )
+ #endif
+-typedef unsigned long UINT32;
++typedef unsigned long UINT32W;
+ #endif
+ #endif
+ 
+@@ -27,9 +27,9 @@
+ #define SHA_DIGESTSIZE		20
+ 
+ typedef struct {
+-    UINT32 digest[5];		/* message digest */
+-    UINT32 count_lo, count_hi;	/* 64-bit bit count */
+-    UINT32 data[16];		/* SHA data buffer */
++    UINT32W digest[5];		/* message digest */
++    UINT32W count_lo, count_hi;	/* 64-bit bit count */
++    UINT32W data[16];		/* SHA data buffer */
+ } SHA_INFO;
+ 
+ void sha_init   _ANSI_ARGS_ ((SHA_INFO *));
