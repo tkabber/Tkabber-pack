@@ -30,7 +30,7 @@ Public License. ≈Є полный текст находитс€ в файле "GNU_GPL.txt",
 инсталл€тора Tkabber-Pack, соответствующие графические файлы
 и прочие файлы поддержки.
 »сходный код Tkabber-Pack доступен в сети »нтернет по адресу
-http://tkabber.jabber.ru/files/tkabber-pack/tkabber-pack-0.11.1.tar.bz2
+https://github.com/tkabber/Tkabber-pack
 
 »спользу€ и/или распростран€€ Tkabber-Pack, вы соглашаетесь со
 всеми лицензи€ми, по которым распростран€ютс€ компоненты, его

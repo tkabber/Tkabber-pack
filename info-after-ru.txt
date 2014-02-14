@@ -46,9 +46,9 @@
   проблему.
 
   Данный дистрибутив называется
-  "официальный Tkabber-Pack 0.11.1, ревизия 1".
+  "официальный Tkabber-Pack 1.1, ревизия 1".
 
-* Tkabber-Pack 0.11.1 собран Константином Хомутовым
+* Tkabber-Pack 1.1 собран Константином Хомутовым
   (khomoutov@gmail.com, xmpp:kostix@007spb.ru)
   с использованием InnoSetup (http://www.jrsoftware.org/isinfo.php)
   и ISTool (http://www.istool.org).

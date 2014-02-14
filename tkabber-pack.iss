@@ -23,27 +23,27 @@ Source: images\manual.ico; DestDir: {app}\images
 Source: images\link.ico; DestDir: {app}\images
 Source: images\wiki.ico; DestDir: {app}\images
 [Setup]
-OutputBaseFilename=tkabber-pack-1.0-r2
+OutputBaseFilename=tkabber-pack-1.1-r1
 OutputDir=..
 Compression=lzma/ultra
 AppCopyright=Alexey Schepin
 AppName=Tkabber
-AppVerName=Tkabber 1.0
+AppVerName=Tkabber 1.1
 DefaultDirName={pf}\Tkabber
 AppSupportURL=http://tkabber.jabber.ru
 AppUpdatesURL=http://tkabber.jabber.ru/download
-AppVersion=Tkabber 1.0
+AppVersion=Tkabber 1.1
 DefaultGroupName=Tkabber
 ShowLanguageDialog=yes
 SetupIconFile=images\install.ico
 WizardImageFile=images\wizard-main.bmp
 WizardSmallImageFile=images\wizard-mini-alt.bmp
 AppID={{DFB83855-0A28-48A7-A452-ECA489A4C558}
-VersionInfoVersion=1.0
+VersionInfoVersion=1.1
 VersionInfoDescription=Tkabber-Pack: all-in-one package containing Tkabber, Tcl/Tk and certain Tcl/Tk extension
-VersionInfoTextVersion=1.0
+VersionInfoTextVersion=1.1
 VersionInfoCopyright=Tkabber-Pack is (c) 2008-2014 Konstantin Khomoutov, artwork is (c) 2008 Artem Bannikov
-UninstallDisplayName=Tkabber 1.0
+UninstallDisplayName=Tkabber 1.1
 InternalCompressLevel=ultra
 SolidCompression=true
 AppContact=xmpp:tkabber@conference.jabber.ru

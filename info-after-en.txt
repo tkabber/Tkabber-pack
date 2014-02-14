@@ -42,9 +42,9 @@
   about your problem.
 
   This distribution is called
-  "official Tkabber-Pack 0.11.1, revision 1".
+  "official Tkabber-Pack 1.1, revision 1".
 
-* Tkabber-Pack 0.11.1 was built by Konstantin Khomoutov
+* Tkabber-Pack 1.1 was built by Konstantin Khomoutov
   (khomoutov@gmail.com, xmpp:kostix@007spb.ru)
   using InnoSetup (http://www.jrsoftware.org/isinfo.php)
   and ISTool (http://www.istool.org).

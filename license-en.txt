@@ -26,7 +26,7 @@ which are not part of the software packages mentioned before.
 They are: the script for generation of the Tkabber-Pack installer,
 pertaining image files and all other miscellaneous support files.
 The source code of Tkabber-Pack is available on the Web
-at http://tkabber.jabber.ru/files/tkabber-pack/tkabber-pack-1.0.zip
+at https://github.com/tkabber/Tkabber-pack
 
 By using and/or redistributing Tkabber-Pack you agree
 with all pertaining licenses.
