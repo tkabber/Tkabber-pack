@@ -10,11 +10,12 @@ include $(SRCDIR)/defs/defs.mak
 include $(SRCDIR)/defs/tools.mak
 include $(SRCDIR)/defs/common.mak
 #
+ROOTDIR?= 	"${CURDIR}"
 BUILDDIR?=	"${CURDIR}/tmp/build"
 PREFIX?=	"${CURDIR}/tcl"
-MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}"
+MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}"
 
-all: install
+all: extract-tkabber install
 build:
 	@cd src && make build ${MAKE_ENV}
 install:

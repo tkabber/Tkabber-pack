@@ -1,7 +1,7 @@
-# WinTclTk shared.mak
+# Tkabber-pack defs
+# based on WinTclTk defs
 # Copyright (c) 2006-2008 Martin Matuska
-#
-# $Id$
+# Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
 install: install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon
@@ -15,7 +15,7 @@ ${DISTFILES}:
 
 ${BUILDDIR}:
 	@[ -d "${BUILDDIR}" ] || mkdir -p ${BUILDDIR}
-	
+
 # tcl	
 fetch-tcl: ${DISTFILES} ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz 
 ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz:
