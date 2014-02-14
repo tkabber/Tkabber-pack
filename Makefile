@@ -15,7 +15,10 @@ BUILDDIR?=	"${CURDIR}/tmp/build"
 PREFIX?=	"${CURDIR}/tcl"
 MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}" W64="${W64}"
 
-all: extract-tkabber install
+all: extract-tkabber install release
+
+release:
+	@ISCC -dTKABBER_VERSION=${TKABBER_VERSION} tkabber-pack.iss
 build:
 	@cd src && make build ${MAKE_ENV}
 install:
