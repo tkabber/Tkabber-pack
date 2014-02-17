@@ -13,7 +13,7 @@ include $(SRCDIR)/defs/common.mak
 ROOTDIR?= 	"${CURDIR}"
 BUILDDIR?=	"${CURDIR}/tmp/build"
 PREFIX?=	"${CURDIR}/tcl"
-MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}"
+MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}" W64="${W64}"
 
 all: extract-tkabber install
 build:

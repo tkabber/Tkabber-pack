@@ -37,7 +37,7 @@ ZLIB_VERSION=		1.2.8
 
 ZIP_VERSION=		2.32
 ZIP_SHORT=		$(subst .,,$(ZIP_VERSION))
-UNZIP_VERSION=		5.52
+UNZIP_VERSION=		6.0
 UNZIP_SHORT=		$(subst .,,$(UNZIP_VERSION))
 BZIP2_VERSION=		1.0.4
 
@@ -53,6 +53,14 @@ UNZIP=		$(TOOLSDIR)/unzip.exe
 ZIP=		$(TOOLSDIR)/zip.exe
 PERL?=		$(shell which perl)
 UPX?=		$(shell which upx)
+ifdef W64
+	WIN64_CFLAGS=--enable-64bit
+	TCLVFS_CFLAGS=-DSTDC_HEADERS=1
+	OPENSSL_TARGET=mingw64
+else
+	OPENSSL_TARGET=mingw
+	TCLVFS_CFLAGS=-D_USE_32BIT_TIME_T=1
+endif
 
 DISTFILES?=	$(SRCDIR)/distfiles
 MD5SUMS=	$(SRCDIR)/md5sums

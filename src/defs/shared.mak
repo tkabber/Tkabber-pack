@@ -29,7 +29,7 @@ ${BUILDDIR}/tcl${TCLTK_VERSION}:
 
 configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile
 ${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile:
-	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && ./configure --prefix=${PREFIX} --enable-shared --enable-threads 
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
 
 build-tcl: configure-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe
 ${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe:
@@ -333,7 +333,7 @@ $(BUILDDIR)/tclvfs:
 
 configure-tclvfs: extract-tclvfs install-tcl $(BUILDDIR)/tclvfs/Makefile
 $(BUILDDIR)/tclvfs/Makefile:
-	@cd $(BUILDDIR)/tclvfs && CFLAGS="-D_USE_32BIT_TIME_T=1" ./configure --prefix=$(PREFIX) --enable-threads --enable-shared
+	@cd $(BUILDDIR)/tclvfs && CFLAGS="${TCLVFS_CFLAGS}" ./configure --prefix=$(PREFIX) --enable-threads --enable-shared $(WIN64_CFLAGS)
 
 build-tclvfs: configure-tclvfs $(BUILDDIR)/tclvfs/vfs$(TCLVFS_LIBVER).dll 
 $(BUILDDIR)/tclvfs/vfs$(TCLVFS_LIBVER).dll:
@@ -389,7 +389,7 @@ distclean-memchan:
 fetch-trf: $(DISTFILES)/trf$(TRF_VERSION).tar.gz
 $(DISTFILES)/trf$(TRF_VERSION).tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 )
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcltrf/trf$(TRF_VERSION).tar.gz"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/project/tcltrf/tcltrf/$(TRF_VERSION)/trf$(TRF_VERSION).tar.gz"
 		
 extract-trf: fetch-trf $(BUILDDIR) $(BUILDDIR)/trf$(TRF_VERSION)/win/Makefile.gnu
 $(BUILDDIR)/trf$(TRF_VERSION)/win/Makefile.gnu:

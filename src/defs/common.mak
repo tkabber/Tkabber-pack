@@ -41,7 +41,7 @@ $(COMMONBUILD)/openssl-${OPENSSL_VERSION}:
 configure-openssl: extract-openssl $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done
 $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done:
 	@[ -x "${PERL}" ] || ( echo "$(MESSAGE_OPENSSL_PERL)"; exit 1 ) 
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && Configure --prefix=${PREFIX} mingw shared threads && touch configure.done 
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && ./Configure --prefix=${PREFIX} ${OPENSSL_TARGET} shared threads && touch configure.done 
 
 build-openssl: configure-openssl $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll 
 $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll:
