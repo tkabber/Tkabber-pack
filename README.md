@@ -14,5 +14,4 @@ Build requirements
 How to build
 ------------
 - Open "MSYS Command prompt" (e.g. `C:\MinGW\msys\1.0\msys.bat` in default setup) and navigate to Tkabber-pack source directory
-- Run `make install` (or `make W64=1 install` for Win64 build (MinGW-W64 required)): it will download tkabber, Tcl/Tk, depended Tcl extensions, and will build it when necessary;
-- `iscc tkabber-pack.iss` will create final Tkabber-pack installer, where `iscc` is Inno Setup's command-line tool, which can be found in the InnoSetup installation directory.
+- Run `configure`, then `make install` (or `make W64=1 install` for Win64 build (MinGW-W64 required)): it will download tkabber, Tcl/Tk, depended Tcl extensions, and will build it when necessary.
