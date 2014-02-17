@@ -41,10 +41,11 @@
   installed, OS version, etc) and provide descriptive report
   about your problem.
 
-  This distribution is called
-  "official Tkabber-Pack 1.1, revision 1".
+  This distribution is called "official Tkabber-Pack @PACKAGE_VERSION@".
 
-* Tkabber-Pack 1.1 was built by Konstantin Khomoutov
+* Tkabber-Pack @PACKAGE_VERSION@ was built by Vitaly Takmazov 
+  (vitalyster@gmail.com, xmpp:_vt@xmpp.ru)
+  on top of prior work of Konstantin Khomoutov
   (khomoutov@gmail.com, xmpp:kostix@007spb.ru)
   using InnoSetup (http://www.jrsoftware.org/isinfo.php)
   and ISTool (http://www.istool.org).

@@ -45,11 +45,12 @@
   установленные плагины, версию ОС и т. п.) и детально опишите свою
   проблему.
 
-  Данный дистрибутив называется
-  "официальный Tkabber-Pack 1.1, ревизия 1".
+  Данный дистрибутив называется "официальный Tkabber-Pack @PACKAGE_VERSION@".
 
-* Tkabber-Pack 1.1 собран Константином Хомутовым
-  (khomoutov@gmail.com, xmpp:kostix@007spb.ru)
+* Tkabber-Pack @PACKAGE_VERSION@ собран Виталием Такмазовым
+  (mailto:vitalyster@gmail.com, xmpp:_vt@xmpp.ru)
+  на основе предыдущей работы Константина Хомутова
+  (mailto:khomoutov@gmail.com, xmpp:kostix@007spb.ru)
   с использованием InnoSetup (http://www.jrsoftware.org/isinfo.php)
   и ISTool (http://www.istool.org).
   Картинки и иконки создал Артём Банников

@@ -16,7 +16,6 @@ Source: doc\wiki.url; DestDir: {app}\doc
 Source: info-after-en.txt; DestDir: {app}\doc; Languages: en
 Source: info-after-ru.txt; DestDir: {app}\doc; Languages: ru
 Source: doc\licenses\*.*; DestDir: {app}\doc\licenses; Flags: recursesubdirs
-Source: doc\ChangeLog; DestDir: {app}\doc
 Source: images\install.ico; DestDir: {app}\images
 Source: images\uninstall.ico; DestDir: {app}\images
 Source: images\manual.ico; DestDir: {app}\images

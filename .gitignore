@@ -5,3 +5,12 @@
 **/src/build_c
 **/tkabber
 **/tkabber-plugins
+/autom4te.cache
+/aclocal.m4
+/compile
+/depcomp
+/install-sh
+/missing
+/stamp-h1
+/config.log
+/config.status
