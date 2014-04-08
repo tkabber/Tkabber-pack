@@ -35,7 +35,7 @@ ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz:
 
 extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/openssl-${OPENSSL_VERSION}
 $(COMMONBUILD)/openssl-${OPENSSL_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/openssl-${OPENSSL_VERSION}.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && sha1sum -c ${MD5SUMS}/openssl-${OPENSSL_VERSION}.tar.gz.sha1 || exit 1
 	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz >/dev/null 2>&1
 
 configure-openssl: extract-openssl $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done
