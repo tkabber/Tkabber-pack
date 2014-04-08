@@ -10,6 +10,7 @@ include $(SRCDIR)/defs/defs.mak
 include $(SRCDIR)/defs/tools.mak
 include $(SRCDIR)/defs/common.mak
 #
+TKABBER_VERSION = @PACKAGE_VERSION@
 ROOTDIR?= 	"${CURDIR}"
 BUILDDIR?=	"${CURDIR}/tmp/build"
 PREFIX?=	"${CURDIR}/tcl"
@@ -17,8 +18,17 @@ MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}" W64="${
 
 all: extract-tkabber install release
 
-release:
-	@ISCC -dTKABBER_VERSION=@PACKAGE_VERSION@ tkabber-pack.iss
+strip-tcl:
+	@rm -rf ${CURDIR}/tcl/include
+	@rm -rf ${CURDIR}/tcl/man
+	@rm -rf ${CURDIR}/tcl/share
+	@rm -rf ${CURDIR}/tcl/ssl/man
+	@rm -rf ${CURDIR}/tcl/lib/pkgconfig
+	@find ${CURDIR}/tcl -type f -name "*.a" -exec rm -f {} \;
+	@find ${CURDIR}/tcl -type f -name "*Config.sh" -exec rm -f {} \;
+
+release: strip-tcl
+	@ISCC -dTKABBER_VERSION=${TKABBER_VERSION} tkabber-pack.iss
 build:
 	@cd src && make build ${MAKE_ENV}
 install:
