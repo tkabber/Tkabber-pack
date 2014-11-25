@@ -3,7 +3,7 @@
 # Copyright (c) 2006-2008 Martin Matuska
 # Copyright (c) 2014 Vitaly Takmazov
 #
-TCLTK_VERSION=		8.6.1
+TCLTK_VERSION=		8.6.3
 TCLLIB_VERSION=		1.15
 BWIDGET_VERSION=	1.9.7
 TWAPI_VERSION=		2.0.12
