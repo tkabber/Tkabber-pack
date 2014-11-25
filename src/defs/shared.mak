@@ -200,12 +200,12 @@ distclean-tls:
 fetch-tcllib: ${DISTFILES} ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz 
 ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcllib/tcllib-${TCLLIB_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/tcltk/tcllib/archive/tcllib_$(subst .,_,${TCLLIB_VERSION}).tar.gz" -O "tcllib-${TCLLIB_VERSION}.tar.gz"
 
 extract-tcllib: fetch-tcllib ${BUILDDIR} ${BUILDDIR}/tcllib-${TCLLIB_VERSION} 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
 	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tcllib-${TCLLIB_VERSION}.tar.gz.md5 || exit 1
-	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz
+	@cd ${BUILDDIR} && tar --transform 's/-tcllib_$(subst .,_,${TCLLIB_VERSION})/-${TCLLIB_VERSION}/' -xf ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz
 
 configure-tcllib: install-tcl extract-tcllib ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile:
