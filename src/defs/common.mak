@@ -41,14 +41,14 @@ $(COMMONBUILD)/openssl-${OPENSSL_VERSION}:
 configure-openssl: extract-openssl $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done
 $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done:
 	@[ -x "${PERL}" ] || ( echo "$(MESSAGE_OPENSSL_PERL)"; exit 1 ) 
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && ./Configure --prefix=${PREFIX} ${OPENSSL_TARGET} shared threads && touch configure.done 
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && ./Configure --prefix=${PREFIX} ${OPENSSL_TARGET} no-shared enable-static-engine threads && touch configure.done 
 
-build-openssl: configure-openssl $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll 
-$(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libeay32.dll:
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make && strip *.dll
+build-openssl: configure-openssl $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libcrypto.a 
+$(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libcrypto.a:
+	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make
 
-install-openssl: build-openssl ${PREFIX}/bin/libeay32.dll
-${PREFIX}/bin/libeay32.dll: 
+install-openssl: build-openssl ${PREFIX}/lib/libcrypto.a
+${PREFIX}/lib/libcrypto.a: 
 	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make install MKDIR="mkdir -p" INSTALLTOP="$(PREFIX)"
 	@cp $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/LICENSE ${PREFIX}/lib/OpenSSL.license
 

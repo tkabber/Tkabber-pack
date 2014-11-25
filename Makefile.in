@@ -23,6 +23,8 @@ strip-tcl:
 	@rm -rf ${CURDIR}/tcl/share
 	@rm -rf ${CURDIR}/tcl/ssl/man
 	@rm -rf ${CURDIR}/tcl/lib/pkgconfig
+	@rm -rf ${CURDIR}/tcl/lib/engines
+	@rm -rf ${CURDIR}/tcl/bin/openssl.exe
 	@find ${CURDIR}/tcl -type f -name "*.a" -exec rm -f {} \;
 	@find ${CURDIR}/tcl -type f -name "*Config.sh" -exec rm -f {} \;
 

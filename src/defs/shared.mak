@@ -175,7 +175,7 @@ ${BUILDDIR}/tls:
 
 configure-tls: install-openssl extract-tls ${BUILDDIR}/tls/Makefile
 ${BUILDDIR}/tls/Makefile:
-	@cd ${BUILDDIR}/tls && autoreconf -if && ./configure --prefix=${PREFIX} --enable-threads --enable-shared --enable-gcc --with-ssl-dir=${PREFIX}
+	@cd ${BUILDDIR}/tls && autoreconf -if && LIBS="-lws2_32 -lgdi32 -lcrypt32" ./configure --prefix=${PREFIX} --enable-threads --enable-shared --enable-gcc --with-ssl-dir=${PREFIX}
 
 build-tls: configure-tls ${BUILDDIR}/tls/tls${TLS_LIBVER}.dll 
 ${BUILDDIR}/tls/tls${TLS_LIBVER}.dll:

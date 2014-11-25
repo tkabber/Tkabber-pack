@@ -15,5 +15,6 @@
 /config.log
 /config.status
 Makefile
+src/defs/defs.mak
 info-after-en.txt
 info-after-ru.txt
