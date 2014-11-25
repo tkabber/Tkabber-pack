@@ -28,7 +28,11 @@ strip-tcl:
 	@find ${CURDIR}/tcl -type f -name "*Config.sh" -exec rm -f {} \;
 
 release: strip-tcl
-	@ISCC -dTKABBER_VERSION=${TKABBER_VERSION} tkabber-pack.iss
+ifdef W64
+	@ISCC -dTKABBER_VERSION=${TKABBER_VERSION} -dTKABBER_HOST=x64 tkabber-pack.iss
+else
+	@ISCC -dTKABBER_VERSION=${TKABBER_VERSION} -dTKABBER_HOST=x86 tkabber-pack.iss
+endif
 build:
 	@cd src && make build ${MAKE_ENV}
 install:

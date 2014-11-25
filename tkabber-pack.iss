@@ -22,7 +22,7 @@ Source: images\manual.ico; DestDir: {app}\images
 Source: images\link.ico; DestDir: {app}\images
 Source: images\wiki.ico; DestDir: {app}\images
 [Setup]
-OutputBaseFilename=tkabber-pack-{#TKABBER_VERSION}
+OutputBaseFilename=tkabber-pack-{#TKABBER_VERSION}-{#TKABBER_HOST}
 OutputDir=..
 Compression=lzma/ultra
 AppCopyright=Alexey Schepin
@@ -48,6 +48,8 @@ SolidCompression=true
 AppContact=xmpp:tkabber@conference.jabber.ru
 AppReadmeFile={app}\doc\tkabber.html
 PrivilegesRequired=none
+ArchitecturesAllowed={#TKABBER_HOST}
+ArchitecturesInstallIn64BitMode={#TKABBER_HOST}
 [Icons]
 Name: {group}\Tkabber; Filename: {app}\Tcl\bin\wish86.exe; Parameters: """{app}\bootstrap.tcl"" -name Tkabber"; WorkingDir: {app}; IconFilename: {app}\images\install.ico
 Name: {group}\Open Plugins Folder; Filename: {app}\Plugins; WorkingDir: {app}\Plugins; Languages: en
