@@ -10,13 +10,12 @@ include $(SRCDIR)/defs/defs.mak
 include $(SRCDIR)/defs/tools.mak
 include $(SRCDIR)/defs/common.mak
 #
-TKABBER_VERSION = @PACKAGE_VERSION@
 ROOTDIR?= 	"${CURDIR}"
 BUILDDIR?=	"${CURDIR}/tmp/build"
 PREFIX?=	"${CURDIR}/tcl"
 MAKE_ENV=	PREFIX="${PREFIX}" BUILDDIR="${BUILDDIR}" ROOTDIR="${ROOTDIR}" W64="${W64}"
 
-all: extract-tkabber install release
+all: install release
 
 strip-tcl:
 	@rm -rf ${CURDIR}/tcl/include

@@ -11,7 +11,7 @@ include $(MDIR)/defs.mak
 include $(MDIR)/tools.mak
 
 BUILDDIR?=	$(CURDIR)/build
-PREFIX?=	$(CURDIR)/instroot
+PREFIX?=	$(CURDIR)/../tcl
 include $(MDIR)/shared.mak
 
 COMMONBUILD?=	$(CURDIR)/build_c

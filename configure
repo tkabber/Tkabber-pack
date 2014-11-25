@@ -2658,7 +2658,7 @@ $as_echo "no" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files info-after-ru.txt info-after-en.txt Makefile"
+ac_config_files="$ac_config_files info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3368,6 +3368,7 @@ do
     "info-after-ru.txt") CONFIG_FILES="$CONFIG_FILES info-after-ru.txt" ;;
     "info-after-en.txt") CONFIG_FILES="$CONFIG_FILES info-after-en.txt" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "src/defs/defs.mak") CONFIG_FILES="$CONFIG_FILES src/defs/defs.mak" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

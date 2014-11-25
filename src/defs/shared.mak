@@ -4,7 +4,7 @@
 # Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
-install: install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon
+install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon
 uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-twapi uninstall-tkcon 
 clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-twapi clean-tkcon
 distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-twapi distclean-tkcon
