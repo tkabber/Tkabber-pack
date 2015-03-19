@@ -88,27 +88,27 @@ distclean-tk:
 fetch-tdom: ${DISTFILES} ${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz 
 ${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tDOM-${TDOM_VERSION}-git.tgz "https://github.com/tDOM/tdom/archive/master.tar.gz"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tDOM-${TDOM_VERSION}-git.tgz "https://github.com/tDOM/tdom/archive/363cbda3ac91b8955edbfd2b64625c725385d5b4.tar.gz"
 
-extract-tdom: fetch-tdom ${BUILDDIR} ${BUILDDIR}/tDOM-master
-${BUILDDIR}/tDOM-master:
+extract-tdom: fetch-tdom ${BUILDDIR} ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4
+${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4:
 	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tDOM-${TDOM_VERSION}-git.tgz.md5 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz
 
 
-configure-tdom: install-tcl extract-tdom ${BUILDDIR}/tDOM-master/Makefile 
-${BUILDDIR}/tDOM-master/Makefile:
-	@cd ${BUILDDIR}/tDOM-master && ./configure --prefix="${PREFIX}" --with-tcl="${PREFIX}/lib"	
+configure-tdom: install-tcl extract-tdom ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/Makefile 
+${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/Makefile:
+	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && ./configure --prefix="${PREFIX}" --with-tcl="${PREFIX}/lib"	
 
-build-tdom: configure-tdom ${BUILDDIR}/tDOM-master/tdom${TDOM_LIBVER}.dll
-${BUILDDIR}/tDOM-master/tdom${TDOM_LIBVER}.dll:
-	@cd ${BUILDDIR}/tDOM-master && make && strip *.dll
+build-tdom: configure-tdom ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/tdom${TDOM_LIBVER}.dll
+${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/tdom${TDOM_LIBVER}.dll:
+	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make && strip *.dll
 
 install-tdom: build-tdom ${PREFIX}/lib/tdom${TDOM_VERSION}
 ${PREFIX}/lib/tdom${TDOM_VERSION}: 
-	@cd ${BUILDDIR}/tDOM-master && make install
+	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make install
 	@mkdir ${PREFIX}/lib/tdom${TDOM_VERSION}/doc
-	@cp ${BUILDDIR}/tDOM-master/LICENSE ${PREFIX}/lib/tdom${TDOM_VERSION}
+	@cp ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/LICENSE ${PREFIX}/lib/tdom${TDOM_VERSION}
 	
 uninstall-tdom:
 	@-cd ${PREFIX}/lib && rm -rf tdom${TDOM_VERSION} tdomConfig.sh
@@ -116,10 +116,10 @@ uninstall-tdom:
 	@-cd ${PREFIX}/man && rm -rf mann
 
 clean-tdom: 
-	@-cd ${BUILDDIR}/tDOM-master && make clean 
+	@-cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make clean 
 
 distclean-tdom: 
-	@-rm -rf ${BUILDDIR}/tDOM-master
+	@-rm -rf ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4
 
 # tkimg
 fetch-tkimg: ${DISTFILES} ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz
