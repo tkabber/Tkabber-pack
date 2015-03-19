@@ -400,7 +400,7 @@ $(BUILDDIR)/trf$(TRF_VERSION)/win/Makefile.gnu:
 
 configure-trf: extract-trf install-tcl install-openssl $(BUILDDIR)/trf$(TRF_VERSION)/Makefile
 $(BUILDDIR)/trf$(TRF_VERSION)/Makefile:
-	@cd $(BUILDDIR)/trf$(TRF_VERSION) && ./configure --prefix=$(PREFIX) --enable-threads --enable-static --enable-shared --with-ssl-dir=$(PREFIX) --with-zlib-dir=$(PREFIX)
+	@cd $(BUILDDIR)/trf$(TRF_VERSION) && ./configure --prefix=$(PREFIX) --enable-threads --enable-static --enable-shared --with-ssl-dir=$(PREFIX) --with-zlib-include-dir=$(BUILDDIR)/tcl${TCLTK_VERSION}/compat/zlib
 
 build-trf: configure-trf $(BUILDDIR)/trf$(TRF_VERSION)/Trf$(TRF_LIBVER).dll 
 $(BUILDDIR)/trf$(TRF_VERSION)/Trf$(TRF_LIBVER).dll:
