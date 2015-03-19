@@ -1,0 +1,11 @@
+--- win/tkWinDialog.c.orig	2015-03-19 15:11:51 +0300
++++ win/tkWinDialog.c	2015-03-19 15:12:00 +0300
+@@ -18,7 +18,7 @@
+ #include <cderr.h>		/* includes the common dialog error codes */
+ 
+ #include <shlobj.h>		/* includes SHBrowseForFolder */
+-#include <shobjidl.h>
++//#include <shobjidl.h>
+ 
+ #ifdef _MSC_VER
+ #   pragma comment (lib, "shell32.lib")
