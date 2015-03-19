@@ -48,8 +48,10 @@ SolidCompression=true
 AppContact=xmpp:tkabber@conference.jabber.ru
 AppReadmeFile={app}\doc\tkabber.html
 PrivilegesRequired=none
+#if TKABBER_HOST == "x64"
 ArchitecturesAllowed={#TKABBER_HOST}
 ArchitecturesInstallIn64BitMode={#TKABBER_HOST}
+#endif
 [Icons]
 Name: {group}\Tkabber; Filename: {app}\Tcl\bin\wish86.exe; Parameters: """{app}\bootstrap.tcl"" -name Tkabber"; WorkingDir: {app}; IconFilename: {app}\images\install.ico
 Name: {group}\Open Plugins Folder; Filename: {app}\Plugins; WorkingDir: {app}\Plugins; Languages: en
