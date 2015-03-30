@@ -477,12 +477,12 @@ configure-snack: install-tk extract-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/
 ${BUILDDIR}/snack${SNACK_VERSION}/win/Makefile:
 	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && \
 		CFLAGS="$(CFLAGS) -I./i386-mingw32/include" \
-		LDFLAGS="$(LDFLAGS) -L./i386-mingw32/lib" \
+		LDFLAGS="$(LDFLAGS) -L./i386-mingw32/lib -static-libgcc" \
 		./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
 build-snack: configure-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll 
 ${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll :
-	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && make && strip *.dll
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && LDFLAGS="-static-libgcc" make && strip *.dll
 
 install-snack: build-snack ${PREFIX}/lib/snack${SNACK_SHORT}
 ${PREFIX}/lib/snack$(SNACK_SHORT):
