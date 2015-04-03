@@ -499,7 +499,7 @@ distclean-snack:
 	@-rm -rf ${BUILDDIR}/snack${SNACK_VERSION}
 
 fetch-windns: ${DISTFILES} ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
-${DISTFILES}/windns-v$(WINDNS_VERSION).tar.gz:
+${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
 	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz" -O windns-${WINDNS_VERSION}.tar.gz
 
