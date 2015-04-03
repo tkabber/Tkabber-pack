@@ -499,7 +499,7 @@ distclean-snack:
 	@-rm -rf ${BUILDDIR}/snack${SNACK_VERSION}
 
 fetch-windns: ${DISTFILES} ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
-${DISTFILES}/windns-v$(WINDNS_VERSION).tar.gz:
+${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
 	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz" -O windns-${WINDNS_VERSION}.tar.gz
 
@@ -514,18 +514,18 @@ ${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile:
 		autoreconf -if -I tclconfig && \
 		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib
 
-build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_SHORT}.dll
-${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_SHORT}.dll:
+build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll
+${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make && strip *.dll
 
-install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_SHORT} ${PREFIX}/tkabber/plugins/windows/windns.tcl
-${PREFIX}/lib/windns${WINDNS_SHORT}:
+install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_LIBVER} ${PREFIX}/tkabber/plugins/windows/windns.tcl
+${PREFIX}/lib/windns${WINDNS_LIBVER}:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make install-binaries
 ${PREFIX}/tkabber/plugins/windows/windns.tcl:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && cp windns.tcl ${ROOTDIR}/tkabber/plugins/windows/windns.tcl
 
 uninstall-windns:
-	@cd ${PREFIX} && rm -rf lib/windns$(WINDNS_SHORT)
+	@cd ${PREFIX} && rm -rf lib/windns$(WINDNS_LIBVER)
 
 clean-windns:
 	@cd {BUILDDIR}/windns-{$WINDNS_VERSION} && make clean
