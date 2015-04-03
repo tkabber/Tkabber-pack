@@ -40,7 +40,8 @@ ZIP_SHORT=		$(subst .,,$(ZIP_VERSION))
 UNZIP_VERSION=		6.0
 UNZIP_SHORT=		$(subst .,,$(UNZIP_VERSION))
 BZIP2_VERSION=		1.0.4
-
+WINDNS_VERSION=		0.1
+WINDNS_SHORT=		$(subst .,,$(WINDNS_VERSION))
 SOURCEFORGE_MIRROR?=	dfn
 GNU_MIRROR?=		ftp.gnu.org/pub/gnu
 POSTGRESQL_MIRROR?=	ftp://ftp.postgresql.org/pub/source/v${POSTGRESQL_VERSION}

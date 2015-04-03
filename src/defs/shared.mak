@@ -4,10 +4,10 @@
 # Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
-install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon
-uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-twapi uninstall-tkcon 
-clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-twapi clean-tkcon
-distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-twapi distclean-tkcon
+install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon install-windns
+uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-twapi uninstall-tkcon uninstall-windns
+clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-twapi clean-tkcon clean-windns
+distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-twapi distclean-tkcon distclean-widns
 
 # directories
 ${DISTFILES}:
@@ -497,4 +497,38 @@ clean-snack:
 
 distclean-snack:
 	@-rm -rf ${BUILDDIR}/snack${SNACK_VERSION}
-	
+
+fetch-windns: ${DISTFILES} ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
+${DISTFILES}/windns-v$(WINDNS_VERSION).tar.gz:
+	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz" -O windns-${WINDNS_VERSION}.tar.gz
+
+extract-windns: fetch-windns ${BUILDDIR} ${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac
+${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac:
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/windns-$(WINDNS_VERSION).tar.gz.sha256 || exit 1
+	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
+
+configure-windns: install-tcl extract-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile
+${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile:
+	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && \
+		autoreconf -if -I tclconfig && \
+		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib
+
+build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_SHORT}.dll
+${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_SHORT}.dll:
+	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make && strip *.dll
+
+install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_SHORT} ${PREFIX}/tkabber/plugins/windows/windns.tcl
+${PREFIX}/lib/windns${WINDNS_SHORT}:
+	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make install-binaries
+${PREFIX}/tkabber/plugins/windows/windns.tcl:
+	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && cp windns.tcl ${ROOTDIR}/tkabber/plugins/windows/windns.tcl
+
+uninstall-windns:
+	@cd ${PREFIX} && rm -rf lib/windns$(WINDNS_SHORT)
+
+clean-windns:
+	@cd {BUILDDIR}/windns-{$WINDNS_VERSION} && make clean
+
+distclean-windns:
+	@rm -rf {BUILDDIR}/windns-{$WINDNS_VERSION}
