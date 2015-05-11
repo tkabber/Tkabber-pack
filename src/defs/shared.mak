@@ -4,10 +4,10 @@
 # Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
-install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-twapi install-tkcon install-windns
-uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-twapi uninstall-tkcon uninstall-windns
-clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-twapi clean-tkcon clean-windns
-distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-twapi distclean-tkcon distclean-widns
+install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-tkcon install-windns
+uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-tkcon uninstall-windns
+clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-tkcon clean-windns
+distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-tkcon distclean-widns
 
 # directories
 ${DISTFILES}:
@@ -253,39 +253,6 @@ clean-bwidget:
 
 distclean-bwidget:
 	@-rm -rf ${BUILDDIR}/bwidget-${BWIDGET_VERSION}
-
-# twapi
-fetch-twapi: ${DISTFILES} ${DISTFILES}/twapi-${TWAPI_VERSION}.zip ${DISTFILES}/twapi-docs-${TWAPI_VERSION}.zip
-${DISTFILES}/twapi-${TWAPI_VERSION}.zip:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/twapi/twapi-${TWAPI_VERSION}.zip"
-${DISTFILES}/twapi-docs-${TWAPI_VERSION}.zip:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/twapi/twapi-docs-${TWAPI_VERSION}.zip"
-
-extract-twapi: fetch-twapi install-unzip ${BUILDDIR} ${BUILDDIR}/twapi ${BUILDDIR}/twapi/website
-${BUILDDIR}/twapi:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/twapi-${TWAPI_VERSION}.zip.md5 || exit 1
-	@cd ${BUILDDIR} && ${UNZIP} ${DISTFILES}/twapi-${TWAPI_VERSION}.zip
-${BUILDDIR}/twapi/website:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/twapi-docs-${TWAPI_VERSION}.zip.md5 || exit 1
-	@cd ${BUILDDIR}/twapi && ${UNZIP} ${DISTFILES}/twapi-docs-${TWAPI_VERSION}.zip
-
-configure-twapi: extract-twapi
-build-twapi: configure-twapi
-
-install-twapi: build-twapi ${PREFIX}/lib/twapi${TWAPI_VERSION}/pkgIndex.tcl
-${PREFIX}/lib/twapi${TWAPI_VERSION}/pkgIndex.tcl:
-	@mkdir -p ${PREFIX}/lib/twapi${TWAPI_VERSION}
-	@cp -Rp ${BUILDDIR}/twapi/* ${PREFIX}/lib/twapi${TWAPI_VERSION}
-
-uninstall-twapi:
-	@-cd ${PREFIX}/lib && rm -rf twapi${TWAPI_VERSION}
-	
-clean-twapi:
-
-distclean-twapi:
-	@-rm -rf ${BUILDDIR}/twapi
 
 # tcludp
 fetch-tcludp: $(DISTFILES) $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz 
