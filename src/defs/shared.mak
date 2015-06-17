@@ -4,10 +4,10 @@
 # Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
-install: extract-tkabber install-tcl install-tk install-memchan install-tls install-tkimg install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-tkcon install-windns
-uninstall: uninstall-tcl uninstall-tk uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-tkcon uninstall-windns
-clean: clean-tcl clean-tk clean-memchan clean-tls clean-tkimg clean-openssl clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-tkcon clean-windns
-distclean: distclean-tcl distclean-tk distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-tkcon distclean-widns
+install: extract-tkabber install-tcl install-tk install-memchan install-tls install-tkimg install-tcludp install-tclvfs install-tcllib install-bwidget ${INSTALL_WIN32_DEPS} install-snack install-tkcon
+uninstall: uninstall-tcl uninstall-tk uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget ${UNINSTALL_WIN32_DEPS} uninstall-snack uninstall-tkcon
+clean: clean-tcl clean-tk clean-memchan clean-tls clean-tkimg clean-openssl clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-snack clean-tkcon ${CLEAN_WIN32_DEPS}
+distclean: distclean-tcl distclean-tk distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget ${DISTCLEAN_WIN32_DEPS} distclean-snack distclean-tkcon
 
 # directories
 ${DISTFILES}:
@@ -27,17 +27,17 @@ ${BUILDDIR}/tcl${TCLTK_VERSION}:
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz
 	@cd ${BUILDDIR}/tcl${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tcl.patch
 
-configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile
-${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile:
-	cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
+configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile
+${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile:
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
 
-build-tcl: configure-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe
-${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe:
-	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && make && strip *.exe *.dll
+build-tcl: configure-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/tclsh86${EXEEXT}
+${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/tclsh86${EXEEXT}:
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && make
 
 install-tcl: build-tcl ${PREFIX}/lib/tclConfig.sh
 ${PREFIX}/lib/tclConfig.sh:
-	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && make install
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && make install
 
 uninstall-tcl:
 	@-cd ${PREFIX}/bin && rm tcl*.dll tclsh*.exe
@@ -45,7 +45,7 @@ uninstall-tcl:
 	@-cd ${PREFIX}/include && rm tclDecls.h tcl.h tclPlatDecls.h
 	
 clean-tcl:
-	@-cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && make clean
+	@-cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && make clean
 
 distclean-tcl:
 	@-rm -rf ${BUILDDIR}/tcl${TCLTK_VERSION}
@@ -61,17 +61,17 @@ ${BUILDDIR}/tk${TCLTK_VERSION}:
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tk${TCLTK_VERSION}-src.tar.gz
 	@cd ${BUILDDIR}/tk${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tk.patch
 
-configure-tk: install-tcl extract-tk ${BUILDDIR}/tk${TCLTK_VERSION}/win/Makefile 
-${BUILDDIR}/tk${TCLTK_VERSION}/win/Makefile:
-	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && autoreconf -fv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
+configure-tk: install-tcl extract-tk ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile
+${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile:
+	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(OSX_CFLAGS)
 
-build-tk: configure-tk ${BUILDDIR}/tk${TCLTK_VERSION}/win/wish86.exe 
-${BUILDDIR}/tk${TCLTK_VERSION}/win/wish86.exe:
-	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && make && strip *.exe *.dll
+build-tk: configure-tk ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/wish86${EXEEXT}
+${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/wish86${EXEEXT}:
+	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && make
 
 install-tk: build-tk ${PREFIX}/lib/tkConfig.sh 
 ${PREFIX}/lib/tkConfig.sh:
-	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && make install
+	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && make install
 	
 uninstall-tk:
 	@-cd ${PREFIX}/bin && rm tk*.dll wish*.exe
@@ -79,7 +79,7 @@ uninstall-tk:
 	@-cd ${PREFIX}/include && rm -rf X11 tk.h tkDecls.h tkIntXlibDecls.h tkPlatDecls.h 
 
 clean-tk:
-	@-cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && make clean
+	@-cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && make clean
 
 distclean-tk:
 	@-rm -rf ${BUILDDIR}/tk${TCLTK_VERSION}
@@ -105,12 +105,12 @@ ${BUILDDIR}/tkimg${TKIMG_SHORT}/Makefile:
 
 build-tkimg: configure-tkimg ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll 
 ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll:
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make && strip */*.dll
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make
 
 install-tkimg: build-tkimg ${PREFIX}/lib/Img${TKIMG_VERSION}
 ${PREFIX}/lib/Img${TKIMG_VERSION}: 
 	@mkdir -p ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="$(PREFIX)/bin/tclsh86.exe $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="$(PREFIX)/bin/tclsh86${EXEEXT} $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && cp license.terms ${PREFIX}/lib/Img${TKIMG_VERSION}
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT}/doc && cp *.css *.htm ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
 
@@ -136,7 +136,7 @@ ${BUILDDIR}/tcltls-${TLS_VERSION}:
 
 configure-tls: install-openssl extract-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile
 ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile:
-	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="-lws2_32 -lcrypt32" ./configure --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="${TLS_WIN32_LIBS}" ./configure --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
 
 build-tls: configure-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll 
 ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll:
@@ -165,7 +165,7 @@ ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz:
 extract-tcllib: fetch-tcllib ${BUILDDIR} ${BUILDDIR}/tcllib-${TCLLIB_VERSION} 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
 	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tcllib-${TCLLIB_VERSION}.tar.gz.md5 || exit 1
-	@cd ${BUILDDIR} && tar --transform 's/-tcllib_$(subst .,_,${TCLLIB_VERSION})/-${TCLLIB_VERSION}/' -xf ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz
+	@cd ${BUILDDIR} && mkdir tcllib-${TCLLIB_VERSION} && tar --strip-components=1 -xf ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz -C tcllib-${TCLLIB_VERSION}
 
 configure-tcllib: install-tcl extract-tcllib ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile:
@@ -294,7 +294,7 @@ $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Makefile:
 
 build-memchan: configure-memchan $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Memchan${MEMCHAN_LIBVER}.dll 
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Memchan${MEMCHAN_LIBVER}.dll :
-	@cd $(BUILDDIR)/Memchan$(MEMCHAN_VERSION) && make && strip *.dll
+	@cd $(BUILDDIR)/Memchan$(MEMCHAN_VERSION) && make
 
 install-memchan: build-memchan $(PREFIX)/lib/Memchan$(MEMCHAN_VERSION)/pkgIndex.tcl
 $(PREFIX)/lib/Memchan$(MEMCHAN_VERSION)/pkgIndex.tcl:
@@ -324,9 +324,9 @@ configure-winico: install-tk build-tcllib extract-winico ${BUILDDIR}/winico-mast
 ${BUILDDIR}/winico-master/Makefile:
 	@cd ${BUILDDIR}/winico-master && ./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
-build-winico: configure-winico ${BUILDDIR}/winico-master/Winico${subst .,,$(WINICO_VERSION)}.dll 
+build-winico: configure-winico ${BUILDDIR}/winico-master/Winico${subst .,,$(WINICO_VERSION)}.dll
 ${BUILDDIR}/winico-master/Winico${subst .,,$(WINICO_VERSION)}.dll :
-	@cd ${BUILDDIR}/winico-master && make MPEXPAND="$(PREFIX)/bin/tclsh86.exe $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/modules/doctools/mpexpand" && strip *.dll
+	@cd ${BUILDDIR}/winico-master && make MPEXPAND="$(PREFIX)/bin/tclsh86${EXEEXT} $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/modules/doctools/mpexpand"
 
 install-winico: build-winico ${PREFIX}/lib/Winico${WINICO_VERSION}
 ${PREFIX}/lib/Winico${WINICO_VERSION}:
@@ -353,18 +353,18 @@ ${BUILDDIR}/snack${SNACK_VERSION}:
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/snack$(SNACK_VERSION).tar.gz
 	@-cd ${BUILDDIR}/snack${SNACK_VERSION} && patch -p0 < $(PATCHDIR)/snack.patch
 	
-configure-snack: install-tk extract-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/Makefile
-${BUILDDIR}/snack${SNACK_VERSION}/win/Makefile:
-	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && \
+configure-snack: install-tk extract-snack ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/Makefile
+${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/Makefile:
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR} && \
 		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
-build-snack: configure-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll 
-${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll :
-	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && make && strip *.dll
+build-snack: configure-snack ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/libsnack${shlibext}
+${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/libsnack${shlibext} :
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR} && make
 
 install-snack: build-snack ${PREFIX}/lib/snack${SNACK_SHORT}
 ${PREFIX}/lib/snack$(SNACK_SHORT):
-	@cd $(BUILDDIR)/snack$(SNACK_VERSION)/win && make install
+	@cd $(BUILDDIR)/snack$(SNACK_VERSION)/${TCL_MAKE_DIR} && make install DESTDIR=${PREFIX}
 	@cd $(BUILDDIR)/snack$(SNACK_VERSION) && cp -f doc/tcl-man.html $(PREFIX)/lib/snack$(SNACK_SHORT)
 	
 uninstall-snack:
@@ -393,7 +393,7 @@ ${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile:
 
 build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll
 ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll:
-	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make && strip *.dll
+	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make
 
 install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_VERSION} ${PREFIX}/tkabber/plugins/windows/windns.tcl
 ${PREFIX}/lib/windns${WINDNS_VERSION}:

@@ -5,9 +5,10 @@ AC_PREREQ(2.53)
 AC_PACKAGE_VERSION(1.1.2)
 AC_INIT([Tkabber-pack], 1.1.2, [], [])
 
+AC_EXEEXT
+
 # Checks for programs.
 AC_PROG_MAKE_SET
-
 AC_CHECK_PROG([CURL], [curl], [curl])
 
 AC_OUTPUT([info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak])

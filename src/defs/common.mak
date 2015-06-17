@@ -15,10 +15,10 @@ ${DISTFILES}/tkabber-plugins-$(TKABBER_VERSION).tar.xz:
 extract-tkabber: fetch-tkabber ${ROOTDIR}/tkabber ${ROOTDIR}/tkabber-plugins ${ROOTDIR}/tkabber/plugins/general/challenge.tcl
 ${ROOTDIR}/tkabber:
 	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tkabber-${TKABBER_VERSION}.tar.xz.sha256 || exit 1
-	@cd ${ROOTDIR} && tar --transform 's/-${TKABBER_VERSION}//' -xJvf ${DISTFILES}/tkabber-${TKABBER_VERSION}.tar.xz  >/dev/null 2>&1
+	@cd ${ROOTDIR} && mkdir tkabber && tar --strip-components=1 -xJvf ${DISTFILES}/tkabber-${TKABBER_VERSION}.tar.xz -C tkabber  >/dev/null 2>&1
 ${ROOTDIR}/tkabber-plugins:
 	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tkabber-plugins-${TKABBER_VERSION}.tar.xz.sha256 || exit 1
-	@cd ${ROOTDIR} && tar --transform 's/-${TKABBER_VERSION}//' -xJvf ${DISTFILES}/tkabber-plugins-${TKABBER_VERSION}.tar.xz  >/dev/null 2>&1
+	@cd ${ROOTDIR} && mkdir tkabber-plugins && tar --strip-components=1 -xJvf ${DISTFILES}/tkabber-plugins-${TKABBER_VERSION}.tar.xz -C tkabber-plugins  >/dev/null 2>&1
 ${ROOTDIR}/tkabber/plugins/general/challenge.tcl:
 # upgrading from 0.11.1 may fail without this file
 	@touch ${ROOTDIR}/tkabber/plugins/general/challenge.tcl
