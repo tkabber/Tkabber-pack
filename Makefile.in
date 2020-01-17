@@ -7,7 +7,6 @@ CURDIR=	$(shell pwd)
 SRCDIR=	$(CURDIR)/src
 #
 include $(SRCDIR)/defs/defs.mak
-include $(SRCDIR)/defs/tools.mak
 include $(SRCDIR)/defs/common.mak
 #
 ROOTDIR?= 	"${CURDIR}"

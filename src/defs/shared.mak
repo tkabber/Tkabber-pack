@@ -4,10 +4,10 @@
 # Copyright (c) 2014 Vitaly Takmazov
 #
 all: install
-install: extract-tkabber install-tcl install-tk install-tdom install-memchan install-tls install-tkimg install-trf install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-tkcon install-windns
-uninstall: uninstall-tcl uninstall-tk uninstall-tdom uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-trf uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-tkcon uninstall-windns
-clean: clean-tcl clean-tk clean-tdom clean-memchan clean-tls clean-tkimg clean-openssl clean-trf clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-tkcon clean-windns
-distclean: distclean-tcl distclean-tk distclean-tdom distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-trf distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-tkcon distclean-widns
+install: extract-tkabber install-tcl install-tk install-memchan install-tls install-tkimg install-tcludp install-tclvfs install-tcllib install-bwidget install-winico install-snack install-tkcon install-windns
+uninstall: uninstall-tcl uninstall-tk uninstall-memchan uninstall-tls uninstall-tkimg uninstall-openssl uninstall-tcludp uninstall-tclvfs uninstall-tcllib uninstall-bwidget uninstall-winico uninstall-snack uninstall-tkcon uninstall-windns
+clean: clean-tcl clean-tk clean-memchan clean-tls clean-tkimg clean-openssl clean-tcludp clean-tclvfs clean-tcllib clean-bwidget clean-winico clean-snack clean-tkcon clean-windns
+distclean: distclean-tcl distclean-tk distclean-memchan distclean-tls distclean-tkimg distclean-openssl distclean-tcludp distclean-tclvfs distclean-tcllib distclean-bwidget distclean-winico distclean-snack distclean-tkcon distclean-widns
 
 # directories
 ${DISTFILES}:
@@ -26,10 +26,11 @@ extract-tcl: fetch-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}
 ${BUILDDIR}/tcl${TCLTK_VERSION}:
 	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tcl${TCLTK_VERSION}-src.tar.gz.md5 || exit 1
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tcl.patch
 
 configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile
 ${BUILDDIR}/tcl${TCLTK_VERSION}/win/Makefile:
-	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
+	cd ${BUILDDIR}/tcl${TCLTK_VERSION}/win && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
 
 build-tcl: configure-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe
 ${BUILDDIR}/tcl${TCLTK_VERSION}/win/tclsh86.exe:
@@ -64,7 +65,7 @@ ${BUILDDIR}/tk${TCLTK_VERSION}:
 
 configure-tk: install-tcl extract-tk ${BUILDDIR}/tk${TCLTK_VERSION}/win/Makefile 
 ${BUILDDIR}/tk${TCLTK_VERSION}/win/Makefile:
-	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && ./configure --prefix=${PREFIX} --enable-shared --enable-threads
+	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/win && autoreconf -fv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
 
 build-tk: configure-tk ${BUILDDIR}/tk${TCLTK_VERSION}/win/wish86.exe 
 ${BUILDDIR}/tk${TCLTK_VERSION}/win/wish86.exe:
@@ -84,43 +85,6 @@ clean-tk:
 
 distclean-tk:
 	@-rm -rf ${BUILDDIR}/tk${TCLTK_VERSION}
-
-# tdom
-fetch-tdom: ${DISTFILES} ${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz 
-${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tDOM-${TDOM_VERSION}-git.tgz "https://github.com/tDOM/tdom/archive/363cbda3ac91b8955edbfd2b64625c725385d5b4.tar.gz"
-
-extract-tdom: fetch-tdom ${BUILDDIR} ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4
-${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tDOM-${TDOM_VERSION}-git.tgz.md5 || exit 1
-	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tDOM-${TDOM_VERSION}-git.tgz
-
-
-configure-tdom: install-tcl extract-tdom ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/Makefile 
-${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/Makefile:
-	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && ./configure --prefix="${PREFIX}" --with-tcl="${PREFIX}/lib"	
-
-build-tdom: configure-tdom ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/tdom${TDOM_LIBVER}.dll
-${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/tdom${TDOM_LIBVER}.dll:
-	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make && strip *.dll
-
-install-tdom: build-tdom ${PREFIX}/lib/tdom${TDOM_VERSION}
-${PREFIX}/lib/tdom${TDOM_VERSION}: 
-	@cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make install
-	@mkdir ${PREFIX}/lib/tdom${TDOM_VERSION}/doc
-	@cp ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4/LICENSE ${PREFIX}/lib/tdom${TDOM_VERSION}
-	
-uninstall-tdom:
-	@-cd ${PREFIX}/lib && rm -rf tdom${TDOM_VERSION} tdomConfig.sh
-	@-cd ${PREFIX}/include && rm tdom.h
-	@-cd ${PREFIX}/man && rm -rf mann
-
-clean-tdom: 
-	@-cd ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4 && make clean 
-
-distclean-tdom: 
-	@-rm -rf ${BUILDDIR}/tdom-363cbda3ac91b8955edbfd2b64625c725385d5b4
 
 # tkimg
 fetch-tkimg: ${DISTFILES} ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz
@@ -166,42 +130,42 @@ distclean-tkimg:
 fetch-tls: ${DISTFILES} ${DISTFILES}/tls${TLS_VERSION}.tar.gz
 ${DISTFILES}/tls${TLS_VERSION}.tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tls${TLS_VERSION}.tar.gz "http://tls.cvs.sourceforge.net/viewvc/tls/tls/?view=tar"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tls${TLS_VERSION}.tar.gz "https://core.tcl-lang.org/tcltls/uv/tcltls-${TLS_VERSION}.tar.gz"
 
-extract-tls: fetch-tls ${BUILDDIR} ${BUILDDIR}/tls
-${BUILDDIR}/tls:
+extract-tls: fetch-tls ${BUILDDIR} ${BUILDDIR}/tcltls-${TLS_VERSION}
+${BUILDDIR}/tcltls-${TLS_VERSION}:
 #	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tls${TLS_VERSION}.tar.gz.md5 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tls${TLS_VERSION}.tar.gz
-	@cd ${BUILDDIR}/tls && patch -p0 < ${PATCHDIR}/tls.patch
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && patch -p0 < ${PATCHDIR}/tls.patch
 
-configure-tls: install-openssl extract-tls ${BUILDDIR}/tls/Makefile
-${BUILDDIR}/tls/Makefile:
-	@cd ${BUILDDIR}/tls && autoreconf -if && LIBS="-lws2_32 -lgdi32 -lcrypt32 -static-libgcc" ./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-ssl-dir=${PREFIX}
+configure-tls: install-openssl extract-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile
+${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile:
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="-lws2_32 -lcrypt32" ./configure --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
 
-build-tls: configure-tls ${BUILDDIR}/tls/tls${TLS_LIBVER}.dll 
-${BUILDDIR}/tls/tls${TLS_LIBVER}.dll:
-	@cd ${BUILDDIR}/tls && make && strip *.dll
+build-tls: configure-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll 
+${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll:
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && make && strip *.dll
 
-install-tls: build-tls ${PREFIX}/lib/tls${TLS_VERSION}
-${PREFIX}/lib/tls${TLS_VERSION}: 
-	@mkdir -p ${PREFIX}/lib/tls${TLS_VERSION}
-	@cd ${BUILDDIR}/tls && make install
-	@cd ${BUILDDIR}/tls && cp license.terms tls.htm ${PREFIX}/lib/tls${TLS_VERSION} 
+install-tls: build-tls ${PREFIX}/lib/tcltls${TLS_VERSION}
+${PREFIX}/lib/tcltls${TLS_VERSION}: 
+	@mkdir -p ${PREFIX}/lib/tcltls${TLS_VERSION}
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && make install
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && cp license.terms tls.htm ${PREFIX}/lib/tcltls${TLS_VERSION} 
 
 uninstall-tls:
-	@-cd ${PREFIX} && rm -rf lib/tls${TLS_VERSION} include/tls.h
+	@-cd ${PREFIX} && rm -rf lib/tcltls${TLS_VERSION} include/tls.h
 
 clean-tls:
-	@-cd ${BUILDDIR}/tls && make clean
+	@-cd ${BUILDDIR}/tcltls-${TLS_VERSION} && make clean
 
 distclean-tls:
-	@-rm -rf ${BUILDDIR}/tls
+	@-rm -rf ${BUILDDIR}/tcltls-${TLS_VERSION}
 
 # tcllib
 fetch-tcllib: ${DISTFILES} ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz 
 ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/tcltk/tcllib/archive/tcllib_$(subst .,_,${TCLLIB_VERSION}).tar.gz" -O "tcllib-${TCLLIB_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://core.tcl-lang.org/tcllib/uv/tcllib-${TCLLIB_VERSION}.tar.gz" -O "tcllib-${TCLLIB_VERSION}.tar.gz"
 
 extract-tcllib: fetch-tcllib ${BUILDDIR} ${BUILDDIR}/tcllib-${TCLLIB_VERSION} 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
@@ -260,66 +224,67 @@ $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz:
 	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
 	@cd $(DISTFILES) && $(WGET) $(WGET_FLAGS) "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tcludp/tcludp-$(TCLUDP_VERSION).tar.gz"
 
-extract-tcludp: fetch-tcludp $(BUILDDIR) $(BUILDDIR)/tcludp-$(TCLUDP_VERSION)
-$(BUILDDIR)/tcludp-$(TCLUDP_VERSION):
+extract-tcludp: fetch-tcludp $(BUILDDIR) $(BUILDDIR)/tcludp
+$(BUILDDIR)/tcludp:
 	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tcludp-$(TCLUDP_VERSION).tar.gz.md5 || exit 1
 	@-cd $(BUILDDIR) && tar xfz $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz
 
-configure-tcludp: extract-tcludp install-tcl $(BUILDDIR)/tcludp-$(TCLUDP_VERSION)/Makefile
-$(BUILDDIR)/tcludp-$(TCLUDP_VERSION)/Makefile:
-	@cd $(BUILDDIR)/tcludp-$(TCLUDP_VERSION) && ./configure --prefix=$(PREFIX) --enable-threads --enable-shared
+configure-tcludp: extract-tcludp install-tcl $(BUILDDIR)/tcludp/Makefile
+$(BUILDDIR)/tcludp/Makefile:
+	@cd $(BUILDDIR)/tcludp && ./configure --prefix=${PREFIX} --enable-threads --enable-shared
 
-build-tcludp: configure-tcludp $(BUILDDIR)/tcludp-$(TCLUDP_VERSION)/udp$(TCLUDP_LIBVER).dll 
-$(BUILDDIR)/tcludp-$(TCLUDP_VERSION)/udp$(TCLUDP_LIBVER).dll:
-	@cd $(BUILDDIR)/tcludp-$(TCLUDP_VERSION) && make && strip *.dll
+build-tcludp: configure-tcludp $(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll 
+$(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll:
+	@cd $(BUILDDIR)/tcludp && make && strip *.dll
 
 install-tcludp: build-tcludp $(PREFIX)/lib/udp$(TCLUDP_VERSION)
 $(PREFIX)/lib/udp$(TCLUDP_VERSION): 
-	@cd $(BUILDDIR)/tcludp-$(TCLUDP_VERSION) && make install
-	@cd ${BUILDDIR}/tcludp-$(TCLUDP_VERSION) && cp license.terms $(PREFIX)/lib/udp${TCLUDP_VERSION}
+	@cd $(BUILDDIR)/tcludp && make install
+	@cd ${BUILDDIR}/tcludp && cp license.terms $(PREFIX)/lib/udp${TCLUDP_VERSION}
 
 uninstall-tcludp:
 	@-cd $(PREFIX)/lib && rm -rf udp$(TCLUDP_VERSION)
 	@-cd $(PREFIX) && rm -rf man
 
 clean-tcludp:
-	@-cd $(BUILDDIR)/tcludp-$(TCLUDP_VERSION) && make clean
+	@-cd $(BUILDDIR)/tcludp && make clean
 
 distclean-tcludp:
-	@-rm -rf $(BUILDDIR)/tcludp-$(TCLUDP_VERSION)	
+	@-rm -rf $(BUILDDIR)/tcludp	
 	
 # tclvfs
 fetch-tclvfs: $(DISTFILES) $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz 
 $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz :
 	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd $(DISTFILES) && $(WGET) $(WGET_FLAGS) -O tclvfs-$(TCLVFS_VERSION).tar.gz "http://tclvfs.cvs.sourceforge.net/viewvc/tclvfs/tclvfs/?view=tar"
+	@cd $(DISTFILES) && $(WGET) $(WGET_FLAGS) -O tclvfs-$(TCLVFS_VERSION).tar.gz "https://core.tcl-lang.org/tclvfs/tarball/b5e463e712/tclvfs-b5e463e712.tar.gz"
 
-extract-tclvfs: fetch-tclvfs $(BUILDDIR) $(BUILDDIR)/tclvfs
-$(BUILDDIR)/tclvfs:
+extract-tclvfs: fetch-tclvfs $(BUILDDIR) $(BUILDDIR)/tclvfs-b5e463e712
+$(BUILDDIR)/tclvfs-b5e463e712:
 #	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tclvfs-$(TCLVFS_VERSION).tar.gz.md5 || exit 1
 	@-cd $(BUILDDIR) && tar xfz $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && patch -p0 < $(PATCHDIR)/tclvfs.patch
 
-configure-tclvfs: extract-tclvfs install-tcl $(BUILDDIR)/tclvfs/Makefile
-$(BUILDDIR)/tclvfs/Makefile:
-	@cd $(BUILDDIR)/tclvfs && CFLAGS="${TCLVFS_CFLAGS}" ./configure --prefix=$(PREFIX) --enable-threads --enable-shared $(WIN64_CFLAGS)
+configure-tclvfs: extract-tclvfs install-tcl $(BUILDDIR)/tclvfs-b5e463e712/Makefile
+$(BUILDDIR)/tclvfs-b5e463e712/Makefile:
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && autoconf && ./configure --prefix=${PREFIX} $(WIN64_CFLAGS)
 
-build-tclvfs: configure-tclvfs $(BUILDDIR)/tclvfs/vfs$(TCLVFS_LIBVER).dll 
-$(BUILDDIR)/tclvfs/vfs$(TCLVFS_LIBVER).dll:
-	@cd $(BUILDDIR)/tclvfs && make && strip *.dll
+build-tclvfs: configure-tclvfs $(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll 
+$(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll:
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && make && strip *.dll
 
 install-tclvfs: build-tclvfs $(PREFIX)/lib/vfs$(TCLVFS_VERSION)
 $(PREFIX)/lib/vfs$(TCLVFS_VERSION): 
-	@cd $(BUILDDIR)/tclvfs && make install
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && make install
 
 uninstall-tclvfs:
 	@-cd $(PREFIX)/lib && rm -rf vfs$(TCLVFS_VERSION)
 	@-cd $(PREFIX) && rm -rf man
 
 clean-tclvfs:
-	@-cd $(BUILDDIR)/tclvfs && make clean
+	@-cd $(BUILDDIR)/tclvfs-b5e463e712 && make clean
 
 distclean-tclvfs:
-	@-rm -rf $(BUILDDIR)/tclvfs
+	@-rm -rf $(BUILDDIR)/tclvfs-b5e463e712
 
 # memchan
 fetch-memchan: $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz
@@ -353,52 +318,16 @@ clean-memchan:
 distclean-memchan:
 	@-rm -rf $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)	
 
-# trf
-fetch-trf: $(DISTFILES)/trf$(TRF_VERSION).tar.gz
-$(DISTFILES)/trf$(TRF_VERSION).tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 )
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/project/tcltrf/tcltrf/$(TRF_VERSION)/trf$(TRF_VERSION).tar.gz"
-		
-extract-trf: fetch-trf $(BUILDDIR) $(BUILDDIR)/trf$(TRF_VERSION)/win/Makefile.gnu
-$(BUILDDIR)/trf$(TRF_VERSION)/win/Makefile.gnu:
-	@cd ${DISTFILES} && md5sum -c $(MD5SUMS)/trf$(TRF_VERSION).tar.gz.md5 || exit 1
-	@cd $(BUILDDIR) && tar xfz $(DISTFILES)/trf$(TRF_VERSION).tar.gz
-	@-cd $(BUILDDIR)/trf$(TRF_VERSION) && patch -p0 < $(PATCHDIR)/trf.patch
-
-configure-trf: extract-trf install-tcl install-openssl $(BUILDDIR)/trf$(TRF_VERSION)/Makefile
-$(BUILDDIR)/trf$(TRF_VERSION)/Makefile:
-	@cd $(BUILDDIR)/trf$(TRF_VERSION) && ./configure --prefix=$(PREFIX) --enable-threads --enable-static --enable-shared --with-ssl-dir=$(PREFIX) --with-zlib-include-dir=$(BUILDDIR)/tcl${TCLTK_VERSION}/compat/zlib
-
-build-trf: configure-trf $(BUILDDIR)/trf$(TRF_VERSION)/Trf$(TRF_LIBVER).dll 
-$(BUILDDIR)/trf$(TRF_VERSION)/Trf$(TRF_LIBVER).dll:
-	@cd $(BUILDDIR)/trf$(TRF_VERSION) && make
-
-install-trf: build-trf  $(PREFIX)/lib/trf$(TRF_VERSION)/pkgIndex.tcl
-$(PREFIX)/lib/trf$(TRF_VERSION)/pkgIndex.tcl:
-	@mkdir -p $(PREFIX)/lib/trf$(TRF_VERSION)/doc
-	@cd $(BUILDDIR)/trf$(TRF_VERSION) && make install
-	@cp -rf $(BUILDDIR)/trf$(TRF_VERSION)/doc/html/* $(BUILDDIR)/trf$(TRF_VERSION)/doc/license.terms \
-		$(PREFIX)/lib/trf$(TRF_VERSION)/doc
-	
-uninstall-trf:
-	@-cd $(PREFIX)/lib && rm -rf trf$(TRF_VERSION)
-
-clean-trf:
-	@-cd $(BUILDDIR)/trf$(TRF_VERSION) && make clean
-
-distclean-trf:
-	@-rm -rf $(BUILDDIR)/trf$(TRF_VERSION)
-	
 # winico
-fetch-winico: ${DISTFILES} ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.zip
-${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.zip:
+fetch-winico: ${DISTFILES} ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz
+${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O winico${subst .,,$(WINICO_VERSION)}cvs.zip "https://github.com/vitalyster/winico/archive/master.zip"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz "https://github.com/vitalyster/winico/archive/master.tar.gz"
 
-extract-winico: install-unzip fetch-winico ${BUILDDIR} ${BUILDDIR}/winico-master
+extract-winico: fetch-winico ${BUILDDIR} ${BUILDDIR}/winico-master
 ${BUILDDIR}/winico-master:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/winico${subst .,,$(WINICO_VERSION)}cvs.zip.md5 || exit 1
-	@cd ${BUILDDIR} && $(UNZIP) ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.zip
+	@cd ${DISTFILES} #&& md5sum -c ${MD5SUMS}/winico${subst .,,$(WINICO_VERSION)}cvs.zip.md5 || exit 1
+	@cd ${BUILDDIR} && tar xf ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz
 	@-cd $(BUILDDIR)/winico-master && patch -p1 < $(PATCHDIR)/winico.patch
 
 configure-winico: install-tk build-tcllib extract-winico ${BUILDDIR}/winico-master/Makefile
@@ -424,32 +353,25 @@ distclean-winico:
 	@-rm -rf ${BUILDDIR}/winico-master
 	
 # snack
-fetch-snack: ${DISTFILES} ${DISTFILES}/snack$(SNACK_VERSION).tar.gz ${DISTFILES}/ming.zip
+fetch-snack: ${DISTFILES} ${DISTFILES}/snack$(SNACK_VERSION).tar.gz
 ${DISTFILES}/snack$(SNACK_VERSION).tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
 	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://www.speech.kth.se/snack/dist/snack${SNACK_VERSION}.tar.gz"
-${DISTFILES}/ming.zip:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://people.montana.com/%7Ebowman/Software/ming.zip"
 			
-extract-snack: fetch-snack ${BUILDDIR} ${BUILDDIR}/snack${SNACK_VERSION}/win/i386-mingw32
-${BUILDDIR}/snack${SNACK_VERSION}/win/i386-mingw32:
+extract-snack: fetch-snack ${BUILDDIR} ${BUILDDIR}/snack${SNACK_VERSION}
+${BUILDDIR}/snack${SNACK_VERSION}:
 	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/snack$(SNACK_VERSION).tar.gz.md5 || exit 1
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/ming.zip.md5 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/snack$(SNACK_VERSION).tar.gz
 	@-cd ${BUILDDIR}/snack${SNACK_VERSION} && patch -p0 < $(PATCHDIR)/snack.patch
-	@-cd ${BUILDDIR}/snack$(SNACK_VERSION)/win && $(UNZIP) ${DISTFILES}/ming.zip
 	
 configure-snack: install-tk extract-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/Makefile
 ${BUILDDIR}/snack${SNACK_VERSION}/win/Makefile:
 	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && \
-		CFLAGS="$(CFLAGS) -I./i386-mingw32/include" \
-		LDFLAGS="$(LDFLAGS) -L./i386-mingw32/lib -static-libgcc" \
-		./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
+		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
 build-snack: configure-snack ${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll 
 ${BUILDDIR}/snack${SNACK_VERSION}/win/libsnack.dll :
-	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && LDFLAGS="-static-libgcc" make && strip *.dll
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/win && make && strip *.dll
 
 install-snack: build-snack ${PREFIX}/lib/snack${SNACK_SHORT}
 ${PREFIX}/lib/snack$(SNACK_SHORT):
@@ -485,14 +407,14 @@ build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WIND
 ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make && strip *.dll
 
-install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_LIBVER} ${PREFIX}/tkabber/plugins/windows/windns.tcl
-${PREFIX}/lib/windns${WINDNS_LIBVER}:
+install-windns: build-windns extract-tkabber ${PREFIX}/lib/windns${WINDNS_VERSION} ${PREFIX}/tkabber/plugins/windows/windns.tcl
+${PREFIX}/lib/windns${WINDNS_VERSION}:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && make install-binaries
 ${PREFIX}/tkabber/plugins/windows/windns.tcl:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && cp windns.tcl ${ROOTDIR}/tkabber/plugins/windows/windns.tcl
 
 uninstall-windns:
-	@cd ${PREFIX} && rm -rf lib/windns$(WINDNS_LIBVER)
+	@cd ${PREFIX} && rm -rf lib/windns$(WINDNS_VERSION)
 
 clean-windns:
 	@cd {BUILDDIR}/windns-{$WINDNS_VERSION} && make clean

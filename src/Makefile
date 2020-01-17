@@ -8,7 +8,6 @@ SRCDIR=	$(CURDIR)
 MDIR?=	defs
 
 include $(MDIR)/defs.mak
-include $(MDIR)/tools.mak
 
 BUILDDIR?=	$(CURDIR)/build
 PREFIX?=	$(CURDIR)/../tcl

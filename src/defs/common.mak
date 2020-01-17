@@ -28,38 +28,38 @@ ${ROOTDIR}/tkabber/plugins/general/challenge.tcl:
 	@touch ${ROOTDIR}/tkabber/plugins/general/challenge.tcl
 
 # openssl
-fetch-openssl: ${DISTFILES} ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz 
-${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz:
+fetch-openssl: ${DISTFILES} ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz 
+${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz:
 	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VERSION}.tar.gz"
 
-extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/openssl-${OPENSSL_VERSION}
-$(COMMONBUILD)/openssl-${OPENSSL_VERSION}:
-	@cd ${DISTFILES} && sha1sum -c ${MD5SUMS}/openssl-${OPENSSL_VERSION}.tar.gz.sha1 || exit 1
-	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/openssl-${OPENSSL_VERSION}.tar.gz >/dev/null 2>&1
+extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}
+$(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
+	@cd ${DISTFILES} && sha1sum -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha1 || exit 1
+	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz >/dev/null 2>&1
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && patch -p0 < $(PATCHDIR)/libressl.patch && autoreconf -ifv
 
-configure-openssl: extract-openssl $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done
-$(COMMONBUILD)/openssl-${OPENSSL_VERSION}/configure.done:
-	@[ -x "${PERL}" ] || ( echo "$(MESSAGE_OPENSSL_PERL)"; exit 1 ) 
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && ./Configure --prefix=${PREFIX} ${OPENSSL_TARGET} no-shared enable-static-engine threads && touch configure.done 
+configure-openssl: extract-openssl $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done
+$(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done:
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
 
-build-openssl: configure-openssl $(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libcrypto.a 
-$(COMMONBUILD)/openssl-$(OPENSSL_VERSION)/libcrypto.a:
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make
+build-openssl: configure-openssl $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a 
+$(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a:
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && make
 
 install-openssl: build-openssl ${PREFIX}/lib/libcrypto.a
 ${PREFIX}/lib/libcrypto.a: 
-	@cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make install MKDIR="mkdir -p" INSTALLTOP="$(PREFIX)"
-	@cp $(COMMONBUILD)/openssl-${OPENSSL_VERSION}/LICENSE ${PREFIX}/lib/OpenSSL.license
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && make install MKDIR="mkdir -p" INSTALLTOP="$(PREFIX)"
+	@cp $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/COPYING ${PREFIX}/lib/LibreSSL.license
 
 uninstall-openssl:
 	@-cd ${PREFIX} && rm -rf bin/openssl.exe bin/libeay32.dll bin/ssleay32.dll include/openssl lib/libssl*.a lib/libcrypto*.a 
 
 clean-openssl:
-	@-cd $(COMMONBUILD)/openssl-${OPENSSL_VERSION} && make clean
+	@-cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && make clean
 
 distclean-openssl:
-	@-rm -rf $(COMMONBUILD)/openssl-${OPENSSL_VERSION}
+	@-rm -rf $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}
 
 # tkcon
 fetch-tkcon: $(DISTFILES) $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz

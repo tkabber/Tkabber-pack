@@ -36,3 +36,22 @@
  #define TCL_SEEK Tcl_Seek
  #define TCL_TELL Tcl_Tell
  #else
+
+--- win/jkAudIO_win.c.orig  2005-12-14 14:29:38 +0300
++++ win/jkAudIO_win.c       2020-01-16 15:38:19 +0300
+@@ -58,15 +58,6 @@
+ /*static ADesc  winad;*/
+ static int    correction = 1;
+
+-const static GUID  KSDATAFORMAT_SUBTYPE_PCM = {0x00000001,0x0000,0x0010,
+-                                                {0x80,
+-                                                0x00,
+-                                                0x00,
+-                                                0xaa,
+-                                                0x00,
+-                                                0x38,
+-                                                0x9b,
+-                                                0x71}};
+ #define SNACK_NUMBER_MIXERS 1
+
+ struct MixerLink mixerLinks[SNACK_NUMBER_MIXERS][2];
