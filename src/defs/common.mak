@@ -3,10 +3,7 @@
 # Copyright (c) 2006-2008 Martin Matuska
 # Copyright (c) 2014 Vitaly Takmazov
 #
-COMMONBUILD?=	$(SRCDIR)/build_c
-
-$(COMMONBUILD):
-	@mkdir -p $(COMMONBUILD)
+COMMONBUILD?=	$(BUILDDIR)
 
 # tkabber
 fetch-tkabber: ${DISTFILES} ${DISTFILES}/tkabber-$(TKABBER_VERSION).tar.xz ${DISTFILES}/tkabber-plugins-$(TKABBER_VERSION).tar.xz

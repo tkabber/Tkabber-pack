@@ -13,5 +13,5 @@ BUILDDIR?=	$(CURDIR)/build
 PREFIX?=	$(CURDIR)/../tcl
 include $(MDIR)/shared.mak
 
-COMMONBUILD?=	$(CURDIR)/build_c
+COMMONBUILD?=	$(BUILDDIR)
 include $(MDIR)/common.mak
