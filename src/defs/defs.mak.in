@@ -40,21 +40,16 @@ TOOLSDIR=	            $(SRCDIR)/tools
 CURL?=                @CURL@
 CURL_FLAGS=           -L -s
 UPX?=                 $(shell which upx)
-ifdef W64
-	WIN64_CFLAGS=--enable-64bit
-	TCLVFS_CFLAGS=-DSTDC_HEADERS=1
-	TCL_MAKE_DIR=win
-	TLS_WIN32_LIBS=-lws2_32 -lgdi32 -lcrypt32
-	INSTALL_WIN32_DEPS=install-winico install-windns
-else
+
 ifdef OSX
 	TCL_MAKE_DIR=unix
 	OSX_CFLAGS=--enable-aqua
+  CMAKE_GENERATOR=Unix Makefiles
 else
-	TCLVFS_CFLAGS=-D_USE_32BIT_TIME_T=1
 	TCL_MAKE_DIR=win
 	TLS_WIN32_LIBS=-lws2_32 -lgdi32 -lcrypt32
-endif
+	INSTALL_WIN32_DEPS=install-winico install-windns
+  CMAKE_GENERATOR=MSYS Makefiles
 endif
 
 DISTFILES?=           $(SRCDIR)/distfiles

@@ -36,7 +36,7 @@ $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
 
 configure-openssl: extract-openssl $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done:
-	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "MSYS Makefiles" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
 
 build-openssl: configure-openssl $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a 
 $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a:
