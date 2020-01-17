@@ -30,7 +30,7 @@ ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz:
 
 extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
-	@cd ${DISTFILES} && sha1sum -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha1 || exit 1
+	@cd ${DISTFILES} && shasum -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha1 || exit 1
 	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz >/dev/null 2>&1
 	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && patch -p0 < $(PATCHDIR)/libressl.patch && autoreconf -ifv
 
@@ -63,7 +63,7 @@ $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz:
 
 extract-tkcon: fetch-tkcon $(COMMONBUILD) $(COMMONBUILD)/tkcon-$(TKCON_VERSION)
 $(COMMONBUILD)/tkcon-$(TKCON_VERSION):
-	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tkcon-$(TKCON_VERSION).tar.gz.md5 || exit 1
+	@cd $(DISTFILES) && shasum -a 256 -c $(MD5SUMS)/tkcon-$(TKCON_VERSION).tar.gz.sha256 || exit 1
 	@cd $(COMMONBUILD) && tar xfz $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz
 	@cd $(COMMONBUILD)/tkcon-$(TKCON_VERSION) && patch -p0 < $(PATCHDIR)/tkcon.patch
 

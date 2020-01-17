@@ -23,7 +23,7 @@ ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz:
 
 extract-tcl: fetch-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION} 
 ${BUILDDIR}/tcl${TCLTK_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tcl${TCLTK_VERSION}-src.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tcl${TCLTK_VERSION}-src.tar.gz.sha256 || exit 1
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz
 	@cd ${BUILDDIR}/tcl${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tcl.patch
 
@@ -57,7 +57,7 @@ ${DISTFILES}/tk${TCLTK_VERSION}-src.tar.gz:
 
 extract-tk: fetch-tk ${BUILDDIR} ${BUILDDIR}/tk${TCLTK_VERSION} 
 ${BUILDDIR}/tk${TCLTK_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tk${TCLTK_VERSION}-src.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tk${TCLTK_VERSION}-src.tar.gz.sha256 || exit 1
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tk${TCLTK_VERSION}-src.tar.gz
 	@cd ${BUILDDIR}/tk${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tk.patch
 
@@ -91,7 +91,7 @@ ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz:
 
 extract-tkimg: fetch-tkimg ${BUILDDIR} ${BUILDDIR}/tkimg${TKIMG_SHORT}
 ${BUILDDIR}/tkimg${TKIMG_SHORT}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tkimg${TKIMG_VERSION}.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tkimg${TKIMG_VERSION}.tar.gz.sha256 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && patch -p0 < ${PATCHDIR}/tkimg.patch
 	@-cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && rm config.cache && find . -name Makefile -exec rm {} \;
@@ -130,7 +130,7 @@ ${DISTFILES}/tls${TLS_VERSION}.tar.gz:
 
 extract-tls: fetch-tls ${BUILDDIR} ${BUILDDIR}/tcltls-${TLS_VERSION}
 ${BUILDDIR}/tcltls-${TLS_VERSION}:
-#	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tls${TLS_VERSION}.tar.gz.md5 || exit 1
+#	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tls${TLS_VERSION}.tar.gz.sha256 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tls${TLS_VERSION}.tar.gz
 	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && patch -p0 < ${PATCHDIR}/tls.patch
 
@@ -140,7 +140,7 @@ ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile:
 
 build-tls: configure-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll 
 ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll:
-	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && make && strip *.dll
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && make
 
 install-tls: build-tls ${PREFIX}/lib/tcltls${TLS_VERSION}
 ${PREFIX}/lib/tcltls${TLS_VERSION}: 
@@ -164,7 +164,7 @@ ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz:
 
 extract-tcllib: fetch-tcllib ${BUILDDIR} ${BUILDDIR}/tcllib-${TCLLIB_VERSION} 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/tcllib-${TCLLIB_VERSION}.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tcllib-${TCLLIB_VERSION}.tar.gz.sha256 || exit 1
 	@cd ${BUILDDIR} && mkdir tcllib-${TCLLIB_VERSION} && tar --strip-components=1 -xf ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz -C tcllib-${TCLLIB_VERSION}
 
 configure-tcllib: install-tcl extract-tcllib ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile 
@@ -193,7 +193,7 @@ ${DISTFILES}/bwidget-${BWIDGET_VERSION}.tar.gz:
 
 extract-bwidget: fetch-bwidget ${BUILDDIR} ${BUILDDIR}/bwidget-${BWIDGET_VERSION} 
 ${BUILDDIR}/bwidget-${BWIDGET_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/bwidget-${BWIDGET_VERSION}.tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/bwidget-${BWIDGET_VERSION}.tar.gz.sha256 || exit 1
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/bwidget-${BWIDGET_VERSION}.tar.gz
 
 configure-bwidget: extract-bwidget
@@ -219,7 +219,7 @@ $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz:
 
 extract-tcludp: fetch-tcludp $(BUILDDIR) $(BUILDDIR)/tcludp
 $(BUILDDIR)/tcludp:
-	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tcludp-$(TCLUDP_VERSION).tar.gz.md5 || exit 1
+	@cd $(DISTFILES) && shasum -a 256 -c $(MD5SUMS)/tcludp-$(TCLUDP_VERSION).tar.gz.sha256 || exit 1
 	@-cd $(BUILDDIR) && tar xfz $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz
 
 configure-tcludp: extract-tcludp install-tcl $(BUILDDIR)/tcludp/Makefile
@@ -228,7 +228,7 @@ $(BUILDDIR)/tcludp/Makefile:
 
 build-tcludp: configure-tcludp $(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll 
 $(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll:
-	@cd $(BUILDDIR)/tcludp && make && strip *.dll
+	@cd $(BUILDDIR)/tcludp && make
 
 install-tcludp: build-tcludp $(PREFIX)/lib/udp$(TCLUDP_VERSION)
 $(PREFIX)/lib/udp$(TCLUDP_VERSION): 
@@ -252,7 +252,7 @@ $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz :
 
 extract-tclvfs: fetch-tclvfs $(BUILDDIR) $(BUILDDIR)/tclvfs-b5e463e712
 $(BUILDDIR)/tclvfs-b5e463e712:
-#	@cd $(DISTFILES) && md5sum -c $(MD5SUMS)/tclvfs-$(TCLVFS_VERSION).tar.gz.md5 || exit 1
+#	@cd $(DISTFILES) && shasum -a 256 -c $(MD5SUMS)/tclvfs-$(TCLVFS_VERSION).tar.gz.sha256 || exit 1
 	@-cd $(BUILDDIR) && tar xfz $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz
 	@cd $(BUILDDIR)/tclvfs-b5e463e712 && patch -p0 < $(PATCHDIR)/tclvfs.patch
 
@@ -262,7 +262,7 @@ $(BUILDDIR)/tclvfs-b5e463e712/Makefile:
 
 build-tclvfs: configure-tclvfs $(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll 
 $(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll:
-	@cd $(BUILDDIR)/tclvfs-b5e463e712 && make && strip *.dll
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && make
 
 install-tclvfs: build-tclvfs $(PREFIX)/lib/vfs$(TCLVFS_VERSION)
 $(PREFIX)/lib/vfs$(TCLVFS_VERSION): 
@@ -285,7 +285,7 @@ $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz:
 		
 extract-memchan: fetch-memchan $(BUILDDIR) $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION):
-	@cd ${DISTFILES} && md5sum -c $(MD5SUMS)/Memchan$(MEMCHAN_VERSION).tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c $(MD5SUMS)/Memchan$(MEMCHAN_VERSION).tar.gz.sha256 || exit 1
 	@cd $(BUILDDIR) && tar xfz $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz
 
 configure-memchan: extract-memchan install-tcl install-tcllib $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Makefile
@@ -316,7 +316,7 @@ ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz:
 
 extract-winico: fetch-winico ${BUILDDIR} ${BUILDDIR}/winico-master
 ${BUILDDIR}/winico-master:
-	@cd ${DISTFILES} #&& md5sum -c ${MD5SUMS}/winico${subst .,,$(WINICO_VERSION)}cvs.zip.md5 || exit 1
+	@cd ${DISTFILES} #&& shasum -a 256 -c ${MD5SUMS}/winico${subst .,,$(WINICO_VERSION)}cvs.zip.sha256 || exit 1
 	@cd ${BUILDDIR} && tar xf ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz
 	@-cd $(BUILDDIR)/winico-master && patch -p1 < $(PATCHDIR)/winico.patch
 
@@ -349,7 +349,7 @@ ${DISTFILES}/snack$(SNACK_VERSION).tar.gz:
 			
 extract-snack: fetch-snack ${BUILDDIR} ${BUILDDIR}/snack${SNACK_VERSION}
 ${BUILDDIR}/snack${SNACK_VERSION}:
-	@cd ${DISTFILES} && md5sum -c ${MD5SUMS}/snack$(SNACK_VERSION).tar.gz.md5 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/snack$(SNACK_VERSION).tar.gz.sha256 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/snack$(SNACK_VERSION).tar.gz
 	@-cd ${BUILDDIR}/snack${SNACK_VERSION} && patch -p0 < $(PATCHDIR)/snack.patch
 	
@@ -382,7 +382,7 @@ ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz:
 
 extract-windns: fetch-windns ${BUILDDIR} ${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac
 ${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac:
-	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/windns-$(WINDNS_VERSION).tar.gz.sha256 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c -c ${MD5SUMS}/windns-$(WINDNS_VERSION).tar.gz.sha256 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
 
 configure-windns: install-tcl extract-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile
