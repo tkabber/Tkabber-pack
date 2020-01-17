@@ -39,19 +39,16 @@ POSTGRESQL_MIRROR?=	ftp://ftp.postgresql.org/pub/source/v${POSTGRESQL_VERSION}
 
 TOOLSDIR=	$(SRCDIR)/tools
 
-WGET?=		$(shell which wget)
-WGET_FLAGS=	--passive-ftp --no-check-certificate
+CURL?=		@CURL@
+CURL_FLAGS=	-L -s
 UPX?=		$(shell which upx)
 ifdef W64
 	WIN64_CFLAGS=--enable-64bit
 	TCLVFS_CFLAGS=-DSTDC_HEADERS=1
-	OPENSSL_TARGET=mingw64
 else
-	OPENSSL_TARGET=mingw
 	TCLVFS_CFLAGS=-D_USE_32BIT_TIME_T=1
 endif
 
 DISTFILES?=	$(SRCDIR)/distfiles
 MD5SUMS=	$(SRCDIR)/md5sums
 PATCHDIR=	$(SRCDIR)/patches
-MESSAGE_WGET=		"You require wget to auto-download the sources. See SOURCES.txt for more information."

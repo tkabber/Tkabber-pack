@@ -19,8 +19,7 @@ ${BUILDDIR}:
 # tcl	
 fetch-tcl: ${DISTFILES} ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz 
 ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
 
 extract-tcl: fetch-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION} 
 ${BUILDDIR}/tcl${TCLTK_VERSION}:
@@ -54,8 +53,7 @@ distclean-tcl:
 # tk
 fetch-tk: ${DISTFILES} ${DISTFILES}/tk${TCLTK_VERSION}-src.tar.gz 
 ${DISTFILES}/tk${TCLTK_VERSION}-src.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
 
 extract-tk: fetch-tk ${BUILDDIR} ${BUILDDIR}/tk${TCLTK_VERSION} 
 ${BUILDDIR}/tk${TCLTK_VERSION}:
@@ -89,8 +87,7 @@ distclean-tk:
 # tkimg
 fetch-tkimg: ${DISTFILES} ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz
 ${DISTFILES}/tkimg${TKIMG_VERSION}.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tkimg/${TKIMG_SHORT}/tkimg${TKIMG_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tkimg/${TKIMG_SHORT}/tkimg${TKIMG_VERSION}.tar.gz"
 
 extract-tkimg: fetch-tkimg ${BUILDDIR} ${BUILDDIR}/tkimg${TKIMG_SHORT}
 ${BUILDDIR}/tkimg${TKIMG_SHORT}:
@@ -129,8 +126,7 @@ distclean-tkimg:
 # tls
 fetch-tls: ${DISTFILES} ${DISTFILES}/tls${TLS_VERSION}.tar.gz
 ${DISTFILES}/tls${TLS_VERSION}.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O tls${TLS_VERSION}.tar.gz "https://core.tcl-lang.org/tcltls/uv/tcltls-${TLS_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -o tls${TLS_VERSION}.tar.gz "https://core.tcl-lang.org/tcltls/uv/tcltls-${TLS_VERSION}.tar.gz"
 
 extract-tls: fetch-tls ${BUILDDIR} ${BUILDDIR}/tcltls-${TLS_VERSION}
 ${BUILDDIR}/tcltls-${TLS_VERSION}:
@@ -164,8 +160,7 @@ distclean-tls:
 # tcllib
 fetch-tcllib: ${DISTFILES} ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz 
 ${DISTFILES}/tcllib-${TCLLIB_VERSION}.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://core.tcl-lang.org/tcllib/uv/tcllib-${TCLLIB_VERSION}.tar.gz" -O "tcllib-${TCLLIB_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} "https://core.tcl-lang.org/tcllib/uv/tcllib-${TCLLIB_VERSION}.tar.gz" -o "tcllib-${TCLLIB_VERSION}.tar.gz"
 
 extract-tcllib: fetch-tcllib ${BUILDDIR} ${BUILDDIR}/tcllib-${TCLLIB_VERSION} 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
@@ -194,8 +189,7 @@ distclean-tcllib:
 # bwidget
 fetch-bwidget: ${DISTFILES} ${DISTFILES}/bwidget-${BWIDGET_VERSION}.tar.gz 
 ${DISTFILES}/bwidget-${BWIDGET_VERSION}.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcllib/bwidget-${BWIDGET_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcllib/bwidget-${BWIDGET_VERSION}.tar.gz"
 
 extract-bwidget: fetch-bwidget ${BUILDDIR} ${BUILDDIR}/bwidget-${BWIDGET_VERSION} 
 ${BUILDDIR}/bwidget-${BWIDGET_VERSION}:
@@ -221,8 +215,7 @@ distclean-bwidget:
 # tcludp
 fetch-tcludp: $(DISTFILES) $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz 
 $(DISTFILES)/tcludp-$(TCLUDP_VERSION).tar.gz:
-	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd $(DISTFILES) && $(WGET) $(WGET_FLAGS) "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tcludp/tcludp-$(TCLUDP_VERSION).tar.gz"
+	@cd $(DISTFILES) && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tcludp/tcludp-$(TCLUDP_VERSION).tar.gz"
 
 extract-tcludp: fetch-tcludp $(BUILDDIR) $(BUILDDIR)/tcludp
 $(BUILDDIR)/tcludp:
@@ -255,8 +248,7 @@ distclean-tcludp:
 # tclvfs
 fetch-tclvfs: $(DISTFILES) $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz 
 $(DISTFILES)/tclvfs-$(TCLVFS_VERSION).tar.gz :
-	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd $(DISTFILES) && $(WGET) $(WGET_FLAGS) -O tclvfs-$(TCLVFS_VERSION).tar.gz "https://core.tcl-lang.org/tclvfs/tarball/b5e463e712/tclvfs-b5e463e712.tar.gz"
+	@cd $(DISTFILES) && ${CURL} ${CURL_FLAGS} -o tclvfs-$(TCLVFS_VERSION).tar.gz "https://core.tcl-lang.org/tclvfs/tarball/b5e463e712/tclvfs-b5e463e712.tar.gz"
 
 extract-tclvfs: fetch-tclvfs $(BUILDDIR) $(BUILDDIR)/tclvfs-b5e463e712
 $(BUILDDIR)/tclvfs-b5e463e712:
@@ -289,8 +281,7 @@ distclean-tclvfs:
 # memchan
 fetch-memchan: $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz
 $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 )
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/memchan/$(MEMCHAN_VERSION)/Memchan$(MEMCHAN_VERSION).tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/memchan/$(MEMCHAN_VERSION)/Memchan$(MEMCHAN_VERSION).tar.gz"
 		
 extract-memchan: fetch-memchan $(BUILDDIR) $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION):
@@ -321,8 +312,7 @@ distclean-memchan:
 # winico
 fetch-winico: ${DISTFILES} ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz
 ${DISTFILES}/winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} -O winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz "https://github.com/vitalyster/winico/archive/master.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -o winico${subst .,,$(WINICO_VERSION)}cvs.tar.gz "https://github.com/vitalyster/winico/archive/master.tar.gz"
 
 extract-winico: fetch-winico ${BUILDDIR} ${BUILDDIR}/winico-master
 ${BUILDDIR}/winico-master:
@@ -355,8 +345,7 @@ distclean-winico:
 # snack
 fetch-snack: ${DISTFILES} ${DISTFILES}/snack$(SNACK_VERSION).tar.gz
 ${DISTFILES}/snack$(SNACK_VERSION).tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://www.speech.kth.se/snack/dist/snack${SNACK_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://www.speech.kth.se/snack/dist/snack${SNACK_VERSION}.tar.gz"
 			
 extract-snack: fetch-snack ${BUILDDIR} ${BUILDDIR}/snack${SNACK_VERSION}
 ${BUILDDIR}/snack${SNACK_VERSION}:
@@ -389,8 +378,7 @@ distclean-snack:
 
 fetch-windns: ${DISTFILES} ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz
 ${DISTFILES}/windns-$(WINDNS_VERSION).tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz" -O windns-${WINDNS_VERSION}.tar.gz
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz" -o windns-${WINDNS_VERSION}.tar.gz
 
 extract-windns: fetch-windns ${BUILDDIR} ${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac
 ${BUILDDIR}/windns-${WINDNS_VERSION}/configure.ac:

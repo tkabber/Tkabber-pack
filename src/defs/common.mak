@@ -11,10 +11,9 @@ $(COMMONBUILD):
 # tkabber
 fetch-tkabber: ${DISTFILES} ${DISTFILES}/tkabber-$(TKABBER_VERSION).tar.xz ${DISTFILES}/tkabber-plugins-$(TKABBER_VERSION).tar.xz
 ${DISTFILES}/tkabber-$(TKABBER_VERSION).tar.xz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://files.jabber.ru/tkabber/tkabber-${TKABBER_VERSION}.tar.xz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "http://files.jabber.ru/tkabber/tkabber-${TKABBER_VERSION}.tar.xz"
 ${DISTFILES}/tkabber-plugins-$(TKABBER_VERSION).tar.xz: 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "http://files.jabber.ru/tkabber/tkabber-plugins-${TKABBER_VERSION}.tar.xz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O  "http://files.jabber.ru/tkabber/tkabber-plugins-${TKABBER_VERSION}.tar.xz"
 
 extract-tkabber: fetch-tkabber ${ROOTDIR}/tkabber ${ROOTDIR}/tkabber-plugins ${ROOTDIR}/tkabber/plugins/general/challenge.tcl
 ${ROOTDIR}/tkabber:
@@ -30,8 +29,7 @@ ${ROOTDIR}/tkabber/plugins/general/challenge.tcl:
 # openssl
 fetch-openssl: ${DISTFILES} ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz 
 ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz:
-	@[ -x "${WGET}" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd ${DISTFILES} && ${WGET} ${WGET_FLAGS} "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VERSION}.tar.gz"
+	@cd ${DISTFILES} && ${CURL} ${CURL_FLAGS} -O "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VERSION}.tar.gz"
 
 extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
@@ -64,8 +62,7 @@ distclean-openssl:
 # tkcon
 fetch-tkcon: $(DISTFILES) $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz
 $(DISTFILES)/tkcon-$(TKCON_VERSION).tar.gz:
-	@[ -x "$(WGET)" ] || ( echo "$(MESSAGE_WGET)"; exit 1 ) 
-	@cd $(DISTFILES) && $(WGET) "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tkcon/tkcon-${TKCON_VERSION}.tar.gz"
+	@cd $(DISTFILES) && ${CURL} ${CURL_FLAGS} -O "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/tkcon/tkcon-${TKCON_VERSION}.tar.gz"
 
 extract-tkcon: fetch-tkcon $(COMMONBUILD) $(COMMONBUILD)/tkcon-$(TKCON_VERSION)
 $(COMMONBUILD)/tkcon-$(TKCON_VERSION):
