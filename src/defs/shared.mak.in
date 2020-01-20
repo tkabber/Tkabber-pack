@@ -110,7 +110,7 @@ ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll:
 install-tkimg: build-tkimg ${PREFIX}/lib/Img${TKIMG_VERSION}
 ${PREFIX}/lib/Img${TKIMG_VERSION}: 
 	@mkdir -p ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="$(PREFIX)/bin/tclsh86${EXEEXT} $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="@TCLSH_PROG@ $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && cp license.terms ${PREFIX}/lib/Img${TKIMG_VERSION}
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT}/doc && cp *.css *.htm ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
 

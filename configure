@@ -583,6 +583,24 @@ PACKAGE_URL=''
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+TCLSH_PROG
+INSTALL_LIBRARY
+INSTALL_SCRIPT
+INSTALL_PROGRAM
+INSTALL_DATA
+INSTALL_DATA_DIR
+INSTALL
+PKG_CFLAGS
+PKG_LIBS
+PKG_INCLUDES
+PKG_HEADERS
+PKG_TCL_SOURCES
+PKG_STUB_OBJECTS
+PKG_STUB_SOURCES
+PKG_STUB_LIB_FILE
+PKG_LIB_FILE
+EXEEXT
+CYGPATH
 CURL
 SET_MAKE
 target_alias
@@ -1664,6 +1682,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+
+
 # Checks for programs.
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
@@ -1695,7 +1715,6 @@ else
 $as_echo "no" >&6; }
   SET_MAKE="MAKE=${MAKE-make}"
 fi
-
 
 # Extract the first word of "curl", so it can be a program name with args.
 set dummy curl; ac_word=$2
@@ -1735,7 +1754,255 @@ fi
 
 
 
-ac_config_files="$ac_config_files info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak"
+
+    TEA_VERSION="3.13"
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking TEA configuration" >&5
+$as_echo_n "checking TEA configuration... " >&6; }
+    if test x"${PACKAGE_NAME}" = x ; then
+	as_fn_error $? "
+The PACKAGE_NAME variable must be defined by your TEA configure.ac" "$LINENO" 5
+    fi
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok (TEA ${TEA_VERSION})" >&5
+$as_echo "ok (TEA ${TEA_VERSION})" >&6; }
+
+    # If the user did not set CFLAGS, set it now to keep macros
+    # like AC_PROG_CC and AC_TRY_COMPILE from adding "-g -O2".
+    if test "${CFLAGS+set}" != "set" ; then
+	CFLAGS=""
+    fi
+
+    case "`uname -s`" in
+	*win32*|*WIN32*|*MINGW32_*|*MINGW64_*|*MSYS_*)
+	    # Extract the first word of "cygpath", so it can be a program name with args.
+set dummy cygpath; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_CYGPATH+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$CYGPATH"; then
+  ac_cv_prog_CYGPATH="$CYGPATH" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_CYGPATH="cygpath -m"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_CYGPATH" && ac_cv_prog_CYGPATH="echo"
+fi
+fi
+CYGPATH=$ac_cv_prog_CYGPATH
+if test -n "$CYGPATH"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CYGPATH" >&5
+$as_echo "$CYGPATH" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+	    EXEEXT=".exe"
+	    TEA_PLATFORM="windows"
+	    ;;
+	*CYGWIN_*)
+	    EXEEXT=".exe"
+	    # CYGPATH and TEA_PLATFORM are determined later in LOAD_TCLCONFIG
+	    ;;
+	*)
+	    CYGPATH=echo
+	    # Maybe we are cross-compiling....
+	    case ${host_alias} in
+		*mingw32*)
+		EXEEXT=".exe"
+		TEA_PLATFORM="windows"
+		;;
+	    *)
+		EXEEXT=""
+		TEA_PLATFORM="unix"
+		;;
+	    esac
+	    ;;
+    esac
+
+    # Check if exec_prefix is set. If not use fall back to prefix.
+    # Note when adjusted, so that TEA_PREFIX can correct for this.
+    # This is needed for recursive configures, since autoconf propagates
+    # $prefix, but not $exec_prefix (doh!).
+    if test x$exec_prefix = xNONE ; then
+	exec_prefix_default=yes
+	exec_prefix=$prefix
+    fi
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: configuring ${PACKAGE_NAME} ${PACKAGE_VERSION}" >&5
+$as_echo "$as_me: configuring ${PACKAGE_NAME} ${PACKAGE_VERSION}" >&6;}
+
+
+
+
+    # This package name must be replaced statically for AC_SUBST to work
+
+    # Substitute STUB_LIB_FILE in case package creates a stub library too.
+
+
+    # We AC_SUBST these here to ensure they are subst'ed,
+    # in case the user doesn't call TEA_ADD_...
+
+
+
+
+
+
+
+
+    # Configure the installer.
+
+    INSTALL='$(SHELL) $(srcdir)/tclconfig/install-sh -c'
+    INSTALL_DATA_DIR='${INSTALL} -d -m 755'
+    INSTALL_DATA='${INSTALL} -m 644'
+    INSTALL_PROGRAM='${INSTALL} -m 755'
+    INSTALL_SCRIPT='${INSTALL} -m 755'
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking system version" >&5
+$as_echo_n "checking system version... " >&6; }
+if ${tcl_cv_sys_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+	# TEA specific:
+	if test "${TEA_PLATFORM}" = "windows" ; then
+	    tcl_cv_sys_version=windows
+	else
+	    tcl_cv_sys_version=`uname -s`-`uname -r`
+	    if test "$?" -ne 0 ; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: can't find uname command" >&5
+$as_echo "$as_me: WARNING: can't find uname command" >&2;}
+		tcl_cv_sys_version=unknown
+	    else
+		if test "`uname -s`" = "AIX" ; then
+		    tcl_cv_sys_version=AIX-`uname -v`.`uname -r`
+		fi
+		if test "`uname -s`" = "NetBSD" -a -f /etc/debian_version ; then
+		    tcl_cv_sys_version=NetBSD-Debian
+		fi
+	    fi
+	fi
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $tcl_cv_sys_version" >&5
+$as_echo "$tcl_cv_sys_version" >&6; }
+    system=$tcl_cv_sys_version
+
+    case $system in
+	HP-UX-*) INSTALL_LIBRARY='${INSTALL} -m 755' ;;
+	      *) INSTALL_LIBRARY='${INSTALL} -m 644' ;;
+    esac
+
+
+
+
+
+
+
+
+
+
+if test "x$build" != "x$host"; then :
+  # Extract the first word of "tclsh", so it can be a program name with args.
+set dummy tclsh; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_TCLSH_PROG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $TCLSH_PROG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_TCLSH_PROG="$TCLSH_PROG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_TCLSH_PROG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+TCLSH_PROG=$ac_cv_path_TCLSH_PROG
+if test -n "$TCLSH_PROG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $TCLSH_PROG" >&5
+$as_echo "$TCLSH_PROG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+else
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for tclsh" >&5
+$as_echo_n "checking for tclsh... " >&6; }
+    if test -f "${TCL_BIN_DIR}/Makefile" ; then
+        # tclConfig.sh is in Tcl build directory
+        if test "${TEA_PLATFORM}" = "windows"; then
+          if test -f "${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}${EXEEXT}" ; then
+            TCLSH_PROG="${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}${EXEEXT}"
+          elif test -f "${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}s${EXEEXT}" ; then
+            TCLSH_PROG="${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}s${EXEEXT}"
+          elif test -f "${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}t${EXEEXT}" ; then
+            TCLSH_PROG="${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}t${EXEEXT}"
+          elif test -f "${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}st${EXEEXT}" ; then
+            TCLSH_PROG="${TCL_BIN_DIR}/tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}st${EXEEXT}"
+          fi
+        else
+            TCLSH_PROG="${TCL_BIN_DIR}/tclsh"
+        fi
+    else
+        # tclConfig.sh is in install location
+        if test "${TEA_PLATFORM}" = "windows"; then
+            TCLSH_PROG="tclsh${TCL_MAJOR_VERSION}${TCL_MINOR_VERSION}${TCL_DBGX}${EXEEXT}"
+        else
+            TCLSH_PROG="tclsh${TCL_MAJOR_VERSION}.${TCL_MINOR_VERSION}${TCL_DBGX}"
+        fi
+        list="`ls -d ${TCL_BIN_DIR}/../bin 2>/dev/null` \
+              `ls -d ${TCL_BIN_DIR}/..     2>/dev/null` \
+              `ls -d ${TCL_PREFIX}/bin     2>/dev/null`"
+        for i in $list ; do
+            if test -f "$i/${TCLSH_PROG}" ; then
+                REAL_TCL_BIN_DIR="`cd "$i"; pwd`/"
+                break
+            fi
+        done
+        TCLSH_PROG="${REAL_TCL_BIN_DIR}${TCLSH_PROG}"
+    fi
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${TCLSH_PROG}" >&5
+$as_echo "${TCLSH_PROG}" >&6; }
+
+
+fi
+
+ac_config_files="$ac_config_files info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak src/defs/shared.mak"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -2446,6 +2713,7 @@ do
     "info-after-en.txt") CONFIG_FILES="$CONFIG_FILES info-after-en.txt" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "src/defs/defs.mak") CONFIG_FILES="$CONFIG_FILES src/defs/defs.mak" ;;
+    "src/defs/shared.mak") CONFIG_FILES="$CONFIG_FILES src/defs/shared.mak" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

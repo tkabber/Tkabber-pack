@@ -11,4 +11,8 @@ AC_EXEEXT
 AC_PROG_MAKE_SET
 AC_CHECK_PROG([CURL], [curl], [curl])
 
-AC_OUTPUT([info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak])
+TEA_INIT()
+
+AS_IF([[test "x$build" != "x$host"]], [AC_PATH_PROG(TCLSH_PROG, tclsh)], [TEA_PROG_TCLSH])
+
+AC_OUTPUT([info-after-ru.txt info-after-en.txt Makefile src/defs/defs.mak src/defs/shared.mak])
