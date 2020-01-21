@@ -1,0 +1,42 @@
+name: CI
+
+on: [push]
+
+jobs:
+  i686-w64-mingw32-gcc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare
+      uses: actions/checkout@v1
+    - name: Install dependencies
+      run: sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib
+    - name: Build
+      run: |
+        ./configure --host=i686-w64-mingw32
+        make install
+        
+  x86_64-w64-mingw32-gcc:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Prepare
+      uses: actions/checkout@v1
+    - name: Install dependencies
+      run: sudo apt install mingw-w64 tclsh tcllib
+    - name: Build
+      run: |
+        ./configure --host=x86_64-w64-mingw32
+        make install
+        
+  macos:
+    runs-on: macos-latest
+    steps:
+    - name: Prepare
+      uses: actions/checkout@v1      
+    - name: Install dependencies
+      run: |
+        brew install autoconf automake
+    - name: Build
+      shell: bash
+      run: |
+        ./configure
+        make install
