@@ -32,11 +32,14 @@ extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
 	@cd ${DISTFILES} && shasum -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha1 || exit 1
 	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz >/dev/null 2>&1
-	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && patch -p0 < $(PATCHDIR)/libressl.patch && autoreconf -ifv
 
 configure-openssl: extract-openssl $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done:
+ifdef CROSSBUILD
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER=@host_alias@-gcc -DCMAKE_SYSTEM_NAME="${CMAKE_SYSTEM_NAME}" -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
+else
 	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
+endif
 
 build-openssl: configure-openssl $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a 
 $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a:
@@ -73,7 +76,7 @@ build-tkcon: configure-tkcon
 install-tkcon: build-tkcon $(PREFIX)/lib/tkcon$(TKCON_VERSION)/pkgIndex.tcl
 $(PREFIX)/lib/tkcon$(TKCON_VERSION)/pkgIndex.tcl:
 	@mkdir -p $(PREFIX)/lib/tkcon$(TKCON_VERSION)
-	@cd $(COMMONBUILD)/tkcon-$(TKCON_VERSION) && cp -Rp tkcon.tcl pkgIndex.tcl README.txt Changelog docs $(PREFIX)/lib/tkcon$(TKCON_VERSION)
+	@cd $(COMMONBUILD)/tkcon-$(TKCON_VERSION) && cp -Rp tkcon.tcl pkgIndex.tcl README.txt ChangeLog docs $(PREFIX)/lib/tkcon$(TKCON_VERSION)
 
 uninstall-tkcon:
 	@-cd $(PREFIX)/lib && rm -rf tkcon$(TKCON_VERSION)

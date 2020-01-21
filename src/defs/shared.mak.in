@@ -29,7 +29,7 @@ ${BUILDDIR}/tcl${TCLTK_VERSION}:
 
 configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile
 ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile:
-	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-shared --enable-threads $(WIN64_CFLAGS)
 
 build-tcl: configure-tcl ${BUILDDIR} ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/tclsh86${EXEEXT}
 ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/tclsh86${EXEEXT}:
@@ -63,7 +63,7 @@ ${BUILDDIR}/tk${TCLTK_VERSION}:
 
 configure-tk: install-tcl extract-tk ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile
 ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile:
-	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --prefix=${PREFIX} --enable-shared --enable-threads $(OSX_CFLAGS)
+	@cd ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-shared --enable-threads $(OSX_CFLAGS)
 
 build-tk: configure-tk ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/wish86${EXEEXT}
 ${BUILDDIR}/tk${TCLTK_VERSION}/${TCL_MAKE_DIR}/wish86${EXEEXT}:
@@ -99,9 +99,9 @@ ${BUILDDIR}/tkimg${TKIMG_SHORT}:
 
 configure-tkimg: install-tk extract-tkimg ${BUILDDIR}/tkimg${TKIMG_SHORT}/libjpeg/Makefile ${BUILDDIR}/tkimg${TKIMG_SHORT}/Makefile
 ${BUILDDIR}/tkimg${TKIMG_SHORT}/libjpeg/Makefile:
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT}/libjpeg && ./configure --prefix=${PREFIX} --enable-threads --enable-shared
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT}/libjpeg && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-threads --enable-shared
 ${BUILDDIR}/tkimg${TKIMG_SHORT}/Makefile:
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && ./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && autoreconf -ifv && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
 build-tkimg: configure-tkimg ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll 
 ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll:
@@ -110,7 +110,7 @@ ${BUILDDIR}/tkimg${TKIMG_SHORT}/base/tkimg${TKIMG_LIBVER}.dll:
 install-tkimg: build-tkimg ${PREFIX}/lib/Img${TKIMG_VERSION}
 ${PREFIX}/lib/Img${TKIMG_VERSION}: 
 	@mkdir -p ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
-	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="@TCLSH_PROG@ $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
+	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && make DTPLITE="$(TCLSH_PROG) $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/apps/dtplite" install
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT} && cp license.terms ${PREFIX}/lib/Img${TKIMG_VERSION}
 	@cd ${BUILDDIR}/tkimg${TKIMG_SHORT}/doc && cp *.css *.htm ${PREFIX}/lib/Img${TKIMG_VERSION}/doc
 
@@ -136,7 +136,7 @@ ${BUILDDIR}/tcltls-${TLS_VERSION}:
 
 configure-tls: install-openssl extract-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile
 ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile:
-	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="${TLS_WIN32_LIBS}" ./configure --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="${TLS_WIN32_LIBS}" ./configure --host=@host_alias@ --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
 
 build-tls: configure-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll 
 ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll:
@@ -169,7 +169,7 @@ ${BUILDDIR}/tcllib-${TCLLIB_VERSION}:
 
 configure-tcllib: install-tcl extract-tcllib ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile 
 ${BUILDDIR}/tcllib-${TCLLIB_VERSION}/Makefile:
-	@cd ${BUILDDIR}/tcllib-${TCLLIB_VERSION} && ./configure --prefix=${PREFIX}
+	@cd ${BUILDDIR}/tcllib-${TCLLIB_VERSION} && ./configure --prefix=${PREFIX} --host=@host_alias@ --with-tclsh=$(TCLSH_PROG)
 
 build-tcllib: configure-tcllib 
 
@@ -224,7 +224,7 @@ $(BUILDDIR)/tcludp:
 
 configure-tcludp: extract-tcludp install-tcl $(BUILDDIR)/tcludp/Makefile
 $(BUILDDIR)/tcludp/Makefile:
-	@cd $(BUILDDIR)/tcludp && ./configure --prefix=${PREFIX} --enable-threads --enable-shared
+	@cd $(BUILDDIR)/tcludp && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-threads --enable-shared
 
 build-tcludp: configure-tcludp $(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll 
 $(BUILDDIR)/tcludp/udp$(TCLUDP_LIBVER).dll:
@@ -258,7 +258,7 @@ $(BUILDDIR)/tclvfs-b5e463e712:
 
 configure-tclvfs: extract-tclvfs install-tcl $(BUILDDIR)/tclvfs-b5e463e712/Makefile
 $(BUILDDIR)/tclvfs-b5e463e712/Makefile:
-	@cd $(BUILDDIR)/tclvfs-b5e463e712 && autoconf && ./configure --prefix=${PREFIX} $(WIN64_CFLAGS)
+	@cd $(BUILDDIR)/tclvfs-b5e463e712 && autoconf && ./configure --host=@host_alias@ --prefix=${PREFIX} $(WIN64_CFLAGS)
 
 build-tclvfs: configure-tclvfs $(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll 
 $(BUILDDIR)/tclvfs-b5e463e712/vfs$(TCLVFS_LIBVER).dll:
@@ -287,10 +287,11 @@ extract-memchan: fetch-memchan $(BUILDDIR) $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION):
 	@cd ${DISTFILES} && shasum -a 256 -c $(MD5SUMS)/Memchan$(MEMCHAN_VERSION).tar.gz.sha256 || exit 1
 	@cd $(BUILDDIR) && tar xfz $(DISTFILES)/Memchan$(MEMCHAN_VERSION).tar.gz
+	@cd $(BUILDDIR)/Memchan$(MEMCHAN_VERSION) && patch -p1 < $(PATCHDIR)/memchan.patch
 
 configure-memchan: extract-memchan install-tcl install-tcllib $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Makefile
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Makefile:
-	@cd $(BUILDDIR)/Memchan$(MEMCHAN_VERSION) && ./configure --prefix=$(PREFIX) --enable-threads --enable-shared  --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
+	@cd $(BUILDDIR)/Memchan$(MEMCHAN_VERSION) && autoreconf -ifv && ./configure --host=@host_alias@ --prefix=$(PREFIX) --enable-threads --enable-shared  --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib --with-tclsh=$(TCLSH_PROG)
 
 build-memchan: configure-memchan $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Memchan${MEMCHAN_LIBVER}.dll 
 $(BUILDDIR)/Memchan$(MEMCHAN_VERSION)/Memchan${MEMCHAN_LIBVER}.dll :
@@ -322,11 +323,11 @@ ${BUILDDIR}/winico-master:
 
 configure-winico: install-tk build-tcllib extract-winico ${BUILDDIR}/winico-master/Makefile
 ${BUILDDIR}/winico-master/Makefile:
-	@cd ${BUILDDIR}/winico-master && ./configure --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
+	@cd ${BUILDDIR}/winico-master && autoreconf -ifv && ./configure --host=@host_alias@ --prefix=${PREFIX} --enable-threads --enable-shared --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
 build-winico: configure-winico ${BUILDDIR}/winico-master/Winico${subst .,,$(WINICO_VERSION)}.dll
 ${BUILDDIR}/winico-master/Winico${subst .,,$(WINICO_VERSION)}.dll :
-	@cd ${BUILDDIR}/winico-master && make MPEXPAND="$(PREFIX)/bin/tclsh86${EXEEXT} $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/modules/doctools/mpexpand"
+	@cd ${BUILDDIR}/winico-master && make MPEXPAND="$(TCLSH_PROG) $(BUILDDIR)/tcllib-$(TCLLIB_VERSION)/modules/doctools/mpexpand"
 
 install-winico: build-winico ${PREFIX}/lib/Winico${WINICO_VERSION}
 ${PREFIX}/lib/Winico${WINICO_VERSION}:
@@ -355,8 +356,10 @@ ${BUILDDIR}/snack${SNACK_VERSION}:
 	
 configure-snack: install-tk extract-snack ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/Makefile
 ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/Makefile:
-	@cd ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR} && \
-		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
+ifdef WINDOWS
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR} && autoreconf -ifv
+endif
+	@cd ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR} && ./configure --host=@host_alias@ --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-tk=${PREFIX}/lib
 
 build-snack: configure-snack ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/libsnack${shlibext}
 ${BUILDDIR}/snack${SNACK_VERSION}/${TCL_MAKE_DIR}/libsnack${shlibext} :
@@ -389,7 +392,7 @@ configure-windns: install-tcl extract-windns ${BUILDDIR}/windns-${WINDNS_VERSION
 ${BUILDDIR}/windns-${WINDNS_VERSION}/Makefile:
 	@cd ${BUILDDIR}/windns-${WINDNS_VERSION} && \
 		autoreconf -if -I tclconfig && \
-		./configure --prefix=${PREFIX} --with-tcl=${PREFIX}/lib
+		./configure --host=@host_alias@ --prefix=${PREFIX} --with-tcl=${PREFIX}/lib
 
 build-windns: configure-windns ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll
 ${BUILDDIR}/windns-${WINDNS_VERSION}/windns${WINDNS_LIBVER}.dll:

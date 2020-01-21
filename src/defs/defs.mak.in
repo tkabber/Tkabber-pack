@@ -31,9 +31,9 @@ LIBRESSL_VERSION=	    3.0.2
 LIBRESSL_LIBVER=	    3.0.2
 
 BZIP2_VERSION=		    1.0.4
-WINDNS_VERSION=		    0.1.2
-WINDNS_LIBVER=		    012
 SOURCEFORGE_MIRROR?=  vorboss
+WINDNS_VERSION=		    0.1.3
+WINDNS_LIBVER=		    $(subst .,,$(WINDNS_VERSION))
 
 TOOLSDIR=	            $(SRCDIR)/tools
 
@@ -41,15 +41,29 @@ CURL?=                @CURL@
 CURL_FLAGS=           -L -s
 UPX?=                 $(shell which upx)
 
-ifdef OSX
-	TCL_MAKE_DIR=unix
+DARWIN=			@DARWIN@
+WINDOWS=		@WINDOWS@
+CROSSBUILD=		@CROSSBUILD@
+CMAKE_SYSTEM_NAME=	@CMAKE_SYSTEM_NAME@
+CMAKE_GENERATOR=	@CMAKE_GENERATOR@
+TCL_MAKE_DIR=		@TCL_MAKE_DIR@
+W64=			@W64@
+
+
+ifdef DARWIN
 	OSX_CFLAGS=--enable-aqua
-  CMAKE_GENERATOR=Unix Makefiles
 else
-	TCL_MAKE_DIR=win
 	TLS_WIN32_LIBS=-lws2_32 -lgdi32 -lcrypt32
 	INSTALL_WIN32_DEPS=install-winico install-windns
-  CMAKE_GENERATOR=MSYS Makefiles
+endif
+ifdef CROSSBUILD
+TCLSH_PROG=		@TCLSH_PROG@
+else
+ifdef DARWIN
+TCLSH_PROG=		$(PREFIX)/bin/tclsh8.6
+else
+TCLSH_PROG=		$(PREFIX)/bin/tclsh86${EXEEXT}
+endif
 endif
 
 DISTFILES?=           $(SRCDIR)/distfiles

@@ -9,12 +9,12 @@
 /aclocal.m4
 /compile
 /depcomp
-/install-sh
-/missing
 /stamp-h1
 /config.log
 /config.status
 Makefile
 src/defs/defs.mak
+src/defs/shared.mak
+src/defs/common.mak
 info-after-en.txt
 info-after-ru.txt

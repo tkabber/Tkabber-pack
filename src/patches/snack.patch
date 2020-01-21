@@ -1,19 +1,3 @@
---- win/Makefile.in.orig	2005-12-14 14:29:39 +0300
-+++ win/Makefile.in	2015-03-30 09:29:24 +0300
-@@ -121,10 +121,10 @@
- 	cp $(SNACK_PKG_FILE) "$(SNACK_INSTALL_DIR)/$(SNACK_PKG_FILE_DEST)"
- 
- $(SNACK_DLL): $(SNACK_OBJS)
--	gcc -shared -o $@ $(SNACK_OBJS) $(SNACK_LIBS)
-+	gcc -shared -o $@ @LDFLAGS@ $(SNACK_OBJS) $(SNACK_LIBS)
- 
- $(SOUND_DLL): $(SOUND_OBJS)
--	gcc -shared -o $@ $(SOUND_OBJS) $(SOUND_LIBS)
-+	gcc -shared -o $@ @LDFLAGS@ $(SOUND_OBJS) $(SOUND_LIBS)
- 
- $(SNACK_STUB) : $(SNACK_STUB_OBJS)
- 	ar cr $@ $(SNACK_STUB_OBJS)
-
 --- generic/jkFormatMP3.c.orig	Thu Apr 26 09:31:49 2007
 +++ generic/jkFormatMP3.c	Thu Apr 26 09:32:36 2007
 @@ -31,7 +31,7 @@
@@ -55,3 +39,40 @@
  #define SNACK_NUMBER_MIXERS 1
 
  struct MixerLink mixerLinks[SNACK_NUMBER_MIXERS][2];
+--- win/configure.in.orig	2020-01-20 17:27:33.516586100 +0300
++++ win/configure.in	2020-01-20 17:28:46.438820000 +0300
+@@ -5,7 +5,7 @@
+ AC_INIT(../generic/snack.h)
+ 
+-SNACK_VERSION=`sh $srcdir/sver.sh $srcdir/../generic/snack.h`
++SNACK_VERSION=2.2
+-SNACK_NODOT_VERSION=`echo $SNACK_VERSION | tr -d .`
++SNACK_NODOT_VERSION=22
+ 
+ AC_CHECK_HEADER(stdint.h)
+ 
+ 
+--- win/Makefile.in.orig	2005-12-14 14:29:39.000000000 +0300
++++ win/Makefile.in	2020-01-20 17:45:20.624981100 +0300
+@@ -1,7 +1,7 @@
+ srcdir = @srcdir@
+ prefix = @prefix@
+ 
+-CC = gcc
++CC = @CC@
+ CFLAGS = @CFLAGS@
+ 
+ INSTALL_DIR = @prefix@
+@@ -121,10 +121,10 @@
+ 	cp $(SNACK_PKG_FILE) "$(SNACK_INSTALL_DIR)/$(SNACK_PKG_FILE_DEST)"
+ 
+ $(SNACK_DLL): $(SNACK_OBJS)
+-	gcc -shared -o $@ $(SNACK_OBJS) $(SNACK_LIBS)
++	@CC@ -shared -o $@ $(LDFLAGS) $(SNACK_OBJS) $(SNACK_LIBS)
+ 
+ $(SOUND_DLL): $(SOUND_OBJS)
+-	gcc -shared -o $@ $(SOUND_OBJS) $(SOUND_LIBS)
++	@CC@ -shared -o $@ $(LDFLAGS) $(SOUND_OBJS) $(SOUND_LIBS)
+ 
+ $(SNACK_STUB) : $(SNACK_STUB_OBJS)
+ 	ar cr $@ $(SNACK_STUB_OBJS)
