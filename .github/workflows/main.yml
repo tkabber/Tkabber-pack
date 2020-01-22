@@ -3,6 +3,27 @@ name: CI
 on: [push]
 
 jobs:
+  msys:
+    runs-on: windows-latest
+    steps:
+      - name: Prepare
+        uses: actions/checkout@v1
+      - name: Download MSYS
+        run: curl -o mingw-get.tar.xz -L -s https://osdn.mirror.constant.com//mingw/68260/mingw-get-0.6.3-mingw32-pre-20170905-1-bin.tar.xz
+      - name: Install MSYS
+        shell: bash
+        run: |          
+          mkdir MinGW
+          cd MinGW          
+          tar -xf ../mingw-get.tar.xz
+          cd bin
+          mingw-get install msys-make
+      - name: Build
+        shell: bash
+        run: |
+          export PATH=$(PWD)/MinGW/msys/1.0/bin:$PATH
+          ./configure
+          make install
   i686-w64-mingw32-gcc:
     runs-on: ubuntu-latest
     steps:
