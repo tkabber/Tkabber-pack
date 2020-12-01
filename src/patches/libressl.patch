@@ -1,0 +1,36 @@
+--- ssl/CMakeLists.txt.orig	2020-12-01 11:42:17.230000000 +0300
++++ ssl/CMakeLists.txt	2020-12-01 11:43:10.840000000 +0300
+@@ -67,8 +67,7 @@
+ 	set(SSL_POSTFIX -${SSL_MAJOR_VERSION})
+ endif()
+ set_target_properties(ssl PROPERTIES
+-	OUTPUT_NAME ssl${SSL_POSTFIX}
+-	ARCHIVE_OUTPUT_NAME ssl${SSL_POSTFIX})
++	RUNTIME_OUTPUT_NAME ssl${SSL_POSTFIX})
+ set_target_properties(ssl PROPERTIES VERSION ${SSL_VERSION}
+ 	SOVERSION ${SSL_MAJOR_VERSION})
+ 
+--- tls/CMakeLists.txt.orig	2020-12-01 11:42:34.030000000 +0300
++++ tls/CMakeLists.txt	2020-12-01 11:43:35.140000000 +0300
+@@ -43,8 +43,7 @@
+ 	set(TLS_POSTFIX -${TLS_MAJOR_VERSION})
+ endif()
+ set_target_properties(tls PROPERTIES
+-	OUTPUT_NAME tls${TLS_POSTFIX}
+-	ARCHIVE_OUTPUT_NAME tls${TLS_POSTFIX})
++	RUNTIME_OUTPUT_NAME tls${TLS_POSTFIX})
+ set_target_properties(tls PROPERTIES VERSION ${TLS_VERSION}
+ 	SOVERSION ${TLS_MAJOR_VERSION})
+ 
+--- crypto/CMakeLists.txt.orig	2020-12-01 11:42:47.170000000 +0300
++++ crypto/CMakeLists.txt	2020-12-01 11:43:55.880000000 +0300
+@@ -990,8 +990,7 @@
+ 	set(CRYPTO_POSTFIX -${CRYPTO_MAJOR_VERSION})
+ endif()
+ set_target_properties(crypto PROPERTIES
+-	OUTPUT_NAME crypto${CRYPTO_POSTFIX}
+-	ARCHIVE_OUTPUT_NAME crypto${CRYPTO_POSTFIX})
++	RUNTIME_OUTPUT_NAME crypto${CRYPTO_POSTFIX})
+ set_target_properties(crypto PROPERTIES VERSION
+ 	${CRYPTO_VERSION} SOVERSION ${CRYPTO_MAJOR_VERSION})
+ 

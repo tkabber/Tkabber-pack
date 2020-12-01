@@ -32,6 +32,7 @@ extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
 	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha256 || exit 1
 	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz >/dev/null 2>&1
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && patch -p0 < ${PATCHDIR}/libressl.patch
 
 configure-openssl: extract-openssl $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done:
