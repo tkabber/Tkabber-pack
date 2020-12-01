@@ -30,15 +30,15 @@ ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz:
 
 extract-openssl: fetch-openssl $(COMMONBUILD) $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}:
-	@cd ${DISTFILES} && shasum -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha1 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/libressl-${LIBRESSL_VERSION}.tar.gz.sha256 || exit 1
 	@-cd $(COMMONBUILD) && tar xfz ${DISTFILES}/libressl-${LIBRESSL_VERSION}.tar.gz >/dev/null 2>&1
 
 configure-openssl: extract-openssl $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done
 $(COMMONBUILD)/libressl-${LIBRESSL_VERSION}/configure.done:
 ifdef CROSSBUILD
-	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER=@host_alias@-gcc -DCMAKE_SYSTEM_NAME="${CMAKE_SYSTEM_NAME}" -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_C_COMPILER=@host_alias@-gcc -DCMAKE_SYSTEM_NAME="${CMAKE_SYSTEM_NAME}" -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done
 else
-	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done 
+	@cd $(COMMONBUILD)/libressl-${LIBRESSL_VERSION} && cmake . -G "${CMAKE_GENERATOR}" -DCMAKE_INSTALL_PREFIX=${PREFIX} -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF && touch configure.done
 endif
 
 build-openssl: configure-openssl $(COMMONBUILD)/libressl-$(LIBRESSL_VERSION)/crypto/libcrypto.a 

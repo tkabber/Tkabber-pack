@@ -136,7 +136,7 @@ ${BUILDDIR}/tcltls-${TLS_VERSION}:
 
 configure-tls: install-openssl extract-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile
 ${BUILDDIR}/tcltls-${TLS_VERSION}/Makefile:
-	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && LIBS="${TLS_WIN32_LIBS}" ./configure --host=@host_alias@ --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
+	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && autoreconf -ifv && CFLAGS="-DLIBRESSL_HAS_TLS1_3=1" LIBS="${TLS_WIN32_LIBS}" ./configure --host=@host_alias@ --enable-hardening=false --enable-static-ssl --prefix=${PREFIX} --with-tcl=${PREFIX}/lib --with-ssl=libressl --with-openssl-dir=${PREFIX}
 
 build-tls: configure-tls ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll 
 ${BUILDDIR}/tcltls-${TLS_VERSION}/tcltls.dll:
