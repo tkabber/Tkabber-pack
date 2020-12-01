@@ -130,7 +130,7 @@ ${DISTFILES}/tls${TLS_VERSION}.tar.gz:
 
 extract-tls: fetch-tls ${BUILDDIR} ${BUILDDIR}/tcltls-${TLS_VERSION}
 ${BUILDDIR}/tcltls-${TLS_VERSION}:
-#	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tls${TLS_VERSION}.tar.gz.sha256 || exit 1
+	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tls${TLS_VERSION}.tar.gz.sha256 || exit 1
 	@-cd ${BUILDDIR} && tar xfz ${DISTFILES}/tls${TLS_VERSION}.tar.gz
 	@cd ${BUILDDIR}/tcltls-${TLS_VERSION} && patch -p0 < ${PATCHDIR}/tls.patch
 
