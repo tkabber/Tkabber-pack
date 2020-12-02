@@ -79,7 +79,7 @@ else()
 endif()
 
 if (NOT HOST_TRIPLET)
-	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpmachine OUTPUT_VARIABLE HOST_TRIPLET)
+	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpmachine OUTPUT_VARIABLE HOST_TRIPLET OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
 ExternalProject_Add(tcl
