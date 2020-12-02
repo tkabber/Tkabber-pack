@@ -12,8 +12,9 @@ jobs:
       run: sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib
     - name: Build
       run: |
-        ./configure --host=i686-w64-mingw32
-        make install
+        mkdir build && cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=i686-w64-ming32-gcc
+        make
         
   x86_64-w64-mingw32-gcc:
     runs-on: ubuntu-latest
@@ -24,8 +25,9 @@ jobs:
       run: sudo apt install mingw-w64 tclsh tcllib
     - name: Build
       run: |
-        ./configure --host=x86_64-w64-mingw32
-        make install
+        mkdir build && cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=x86_64-w64-ming32-gcc
+        make
         
   macos:
     runs-on: macos-latest
