@@ -172,7 +172,7 @@ ExternalProject_Add(memchan
   URL_HASH SHA256=${MEMCHAN_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/memchan.patch
-  CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --with-tclsh=${TCLSH_EXE}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
