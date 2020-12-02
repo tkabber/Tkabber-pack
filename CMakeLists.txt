@@ -72,12 +72,18 @@ find_program(TCLSH_EXE
   REQUIRED
 )
 
+if (WIN32)
+  set(TCLCONFIG_DIR win)
+else()
+  set(TCLCONFIG_DIR unix)
+endif()
+
 ExternalProject_Add(tcl
   URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
   URL_HASH SHA256=${TCL_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
 )
@@ -90,7 +96,7 @@ ExternalProject_Add(tk
   URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
   URL_HASH SHA256=${TK_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -171,7 +177,7 @@ ExternalProject_Add(snack
   URL_HASH SHA256=${SNACK_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/snack.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   INSTALL_COMMAND ${MAKE_EXE} install DESTDIR=<INSTALL_DIR>
   UPDATE_COMMAND ""
