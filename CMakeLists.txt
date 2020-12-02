@@ -188,7 +188,7 @@ ExternalProject_Add(snack
   BUILD_COMMAND ${MAKE_EXE}
   INSTALL_COMMAND ${MAKE_EXE} install DESTDIR=<INSTALL_DIR>
   UPDATE_COMMAND ""
-  DEPENDS tcl
+  DEPENDS tcl;tk
 )
 
 if (WIN32)
