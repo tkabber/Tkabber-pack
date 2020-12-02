@@ -3295,11 +3295,11 @@
  .SUFFIXES: .man .html .n
  .man.html:
 -	mpexpand html "`@CYGPATH@ $<`" "$@"
-+	$(MPEXPAND) html "`@CYGPATH@ $<`" "$@"
++	-$(MPEXPAND) html "`@CYGPATH@ $<`" "$@"
  
  .man.n:
 -	mpexpand nroff "`@CYGPATH@ $<`" "$@"
-+	$(MPEXPAND) nroff "`@CYGPATH@ $<`" "$@"
++	-$(MPEXPAND) nroff "`@CYGPATH@ $<`" "$@"
  
  #========================================================================
  # Create the pkgIndex.tcl file.

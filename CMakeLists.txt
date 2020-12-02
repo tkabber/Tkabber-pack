@@ -112,7 +112,7 @@ ExternalProject_Add(libressl
   URL "https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-${LIBRESSL_VERSION}.tar.gz"
   URL_HASH SHA256=${LIBRESSL_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBUILD_SHARED_LIBS=OFF -DLIBRESSL_APPS=OFF -DLIBRESSL_TESTS=OFF -DCMAKE_SYSTEM_NAME=${CMAKE_SYSTEM_NAME} -DCMAKE_C_COMPILER:STRING=${CMAKE_C_COMPILER}
   CMAKE_CACHE_ARGS -DCMAKE_MSVC_RUNTIME_LIBRARY:STRING=${CMAKE_MSVC_RUNTIME_LIBRARY} -DCMAKE_POLICY_DEFAULT_CMP0091:STRING=NEW
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/libressl.patch
   UPDATE_COMMAND ""
@@ -122,7 +122,8 @@ ExternalProject_Add(tls
   URL "https://core.tcl-lang.org/tcltls/uv/tcltls-${TLS_VERSION}.tar.gz"
   URL_HASH SHA256=${TLS_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND CFLAGS=-DLIBRESSL_HAS_TLS1_3=1 PKG_CONFIG_LIBDIR=<INSTALL_DIR>/lib/pkgconfig <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --enable-hardening=false --enable-static-ssl -with-tcl=${CMAKE_INSTALL_PREFIX}/lib --with-ssl=libressl
+  PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tls.patch
+  CONFIGURE_COMMAND autoreconf -ifv <SOURCE_DIR> && CFLAGS=-DLIBRESSL_HAS_TLS1_3=1 PKG_CONFIG_LIBDIR=<INSTALL_DIR>/lib/pkgconfig <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --enable-hardening=false --enable-static-ssl -with-tcl=${CMAKE_INSTALL_PREFIX}/lib --with-ssl=libressl
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl;libressl
@@ -161,7 +162,7 @@ ExternalProject_Add(tclvfs
   URL "https://core.tcl-lang.org/tclvfs/tarball/b5e463e712/tclvfs-b5e463e712.tar.gz"
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tclvfs.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -203,8 +204,9 @@ if (WIN32)
   ExternalProject_Add(winico
     URL "https://github.com/vitalyster/winico/archive/master.tar.gz"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
-    BUILD_COMMAND ${MAKE_EXE} MPEXPAND="${TCLSH_EXE} <INSTALL_DIR>/lib/tcllib${TCLLIB_VERSION}/modules/doctools/mpexpand"
+    PATCH_COMMAND patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/winico.patch
+    CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
+    BUILD_COMMAND ${MAKE_EXE}
     INSTALL_COMMAND ${MAKE_EXE} pkgIndex.tcl && ${MAKE_EXE} install-binaries
     UPDATE_COMMAND ""
     DEPENDS tcl;tk;tcllib
