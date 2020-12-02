@@ -26,6 +26,7 @@ ${BUILDDIR}/tcl${TCLTK_VERSION}:
 	@cd ${DISTFILES} && shasum -a 256 -c ${MD5SUMS}/tcl${TCLTK_VERSION}-src.tar.gz.sha256 || exit 1
 	@cd ${BUILDDIR} && tar xfz ${DISTFILES}/tcl${TCLTK_VERSION}-src.tar.gz
 	@cd ${BUILDDIR}/tcl${TCLTK_VERSION} && patch -p0 < ${PATCHDIR}/tcl.patch
+	@cd ${BUILDDIR}/tcl${TCLTK_VERSION} && patch -p1 < ${PATCHDIR}/tcl-f7fa48.patch
 
 configure-tcl: extract-tcl ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile
 ${BUILDDIR}/tcl${TCLTK_VERSION}/${TCL_MAKE_DIR}/Makefile:
