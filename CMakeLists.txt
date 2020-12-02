@@ -72,7 +72,7 @@ find_program(TCLSH_EXE
   REQUIRED
 )
 
-if (WIN32)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set(TCLCONFIG_DIR win)
   set(SNACK_CONFIG_COMMAND autoreconf -ifv <SOURCE_DIR>/${TCLCONFIG_DIR} && <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --with-tcl=<INSTALL_DIR>/lib --with-tk=<INSTALL_DIR>/lib)
 else()
