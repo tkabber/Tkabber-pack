@@ -13,7 +13,7 @@ jobs:
     - name: Build
       run: |
         mkdir build && cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=i686-w64-ming32-gcc
+        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=i686-w64-mingw32-gcc
         make
         
   x86_64-w64-mingw32-gcc:
@@ -26,7 +26,7 @@ jobs:
     - name: Build
       run: |
         mkdir build && cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=x86_64-w64-ming32-gcc
+        cmake .. -DCMAKE_INSTALL_PREFIX=dist -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_C_COMPILER=x86_64-w64-mingw32-gcc
         make
         
   macos:
