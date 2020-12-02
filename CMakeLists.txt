@@ -78,12 +78,16 @@ else()
   set(TCLCONFIG_DIR unix)
 endif()
 
+if (NOT HOST_TRIPLET)
+	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpmachine OUTPUT_VARIABLE HOST_TRIPLET)
+endif()
+
 ExternalProject_Add(tcl
   URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
   URL_HASH SHA256=${TCL_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
 )
@@ -96,7 +100,7 @@ ExternalProject_Add(tk
   URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
   URL_HASH SHA256=${TK_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -116,7 +120,7 @@ ExternalProject_Add(tls
   URL "https://core.tcl-lang.org/tcltls/uv/tcltls-${TLS_VERSION}.tar.gz"
   URL_HASH SHA256=${TLS_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND CFLAGS=-DLIBRESSL_HAS_TLS1_3=1 PKG_CONFIG_LIBDIR=<INSTALL_DIR>/lib/pkgconfig <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-hardening=false --enable-static-ssl -with-tcl=${CMAKE_INSTALL_PREFIX}/lib --with-ssl=libressl
+  CONFIGURE_COMMAND CFLAGS=-DLIBRESSL_HAS_TLS1_3=1 PKG_CONFIG_LIBDIR=<INSTALL_DIR>/lib/pkgconfig <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --enable-hardening=false --enable-static-ssl -with-tcl=${CMAKE_INSTALL_PREFIX}/lib --with-ssl=libressl
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl;libressl
@@ -126,7 +130,7 @@ ExternalProject_Add(tcllib
   URL "https://core.tcl-lang.org/tcllib/uv/tcllib-${TCLLIB_VERSION}.tar.gz"
   URL_HASH SHA256=${TCLLIB_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --with-tclsh=${TCLSH_EXE}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --with-tclsh=${TCLSH_EXE}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
 )
@@ -145,7 +149,7 @@ ExternalProject_Add(tcludp
   URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcludp/tcludp-${TCLUDP_VERSION}.tar.gz"
   URL_HASH SHA256=${TCLUDP_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -155,7 +159,7 @@ ExternalProject_Add(tclvfs
   URL "https://core.tcl-lang.org/tclvfs/tarball/b5e463e712/tclvfs-b5e463e712.tar.gz"
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tclvfs.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -166,7 +170,7 @@ ExternalProject_Add(memchan
   URL_HASH SHA256=${MEMCHAN_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/memchan.patch
-  CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   UPDATE_COMMAND ""
   DEPENDS tcl
@@ -177,7 +181,7 @@ ExternalProject_Add(snack
   URL_HASH SHA256=${SNACK_HASH}
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/snack.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXE}
   INSTALL_COMMAND ${MAKE_EXE} install DESTDIR=<INSTALL_DIR>
   UPDATE_COMMAND ""
@@ -188,16 +192,16 @@ if (WIN32)
   ExternalProject_Add(windns
     URL "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+    CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
     BUILD_COMMAND ${MAKE_EXE}
-    INSTALL_COMMAND ${MAKE_EXE} install 
+    INSTALL_COMMAND ${MAKE_EXE} install-binaries 
     UPDATE_COMMAND ""
     DEPENDS tcl
   )
   ExternalProject_Add(winico
     URL "https://github.com/vitalyster/winico/archive/master.tar.gz"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
     BUILD_COMMAND ${MAKE_EXE} MPEXPAND="${TCLSH_EXE} <INSTALL_DIR>/lib/tcllib${TCLLIB_VERSION}/modules/doctools/mpexpand"
     INSTALL_COMMAND ${MAKE_EXE} pkgIndex.tcl && ${MAKE_EXE} install-binaries
     UPDATE_COMMAND ""
