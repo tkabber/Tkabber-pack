@@ -191,7 +191,7 @@ ExternalProject_Add(snack
   DEPENDS tcl;tk
 )
 
-if (WIN32)
+if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   ExternalProject_Add(windns
     URL "https://github.com/vitalyster/windns/archive/v${WINDNS_VERSION}.tar.gz"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
