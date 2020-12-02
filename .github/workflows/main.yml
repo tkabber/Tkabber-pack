@@ -38,5 +38,6 @@ jobs:
     - name: Build
       shell: bash
       run: |
-        ./configure
-        make install
+        mkdir build && cd build
+        cmake .. -DCMAKE_INSTALL_PREFIX=dist
+        make
