@@ -18,7 +18,7 @@ jobs:
           cd MinGW          
           tar -xf ../mingw-get.tar.xz
           cd bin
-          mingw-get install msys-make
+          ./mingw-get install msys-make
       - name: Build
         shell: bash
         run: |
