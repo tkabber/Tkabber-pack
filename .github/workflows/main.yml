@@ -18,12 +18,12 @@ jobs:
           cd MinGW          
           tar -xf ../mingw-get.tar.xz
           cd bin
-          ./mingw-get install msys-make
+          ./mingw-get install msys-make mingw32-gcc mingw32-autoconf
       - name: Build
         shell: bash
         run: |
           export PATH=$(PWD)/MinGW/msys/1.0/bin:$PATH
-          ./configure
+          bash configure
           make install
   i686-w64-mingw32-gcc:
     runs-on: ubuntu-latest
