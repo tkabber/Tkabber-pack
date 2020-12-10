@@ -9,6 +9,7 @@ jobs:
       - name: Prepare
         uses: actions/checkout@v1
       - name: Download MSYS
+        shell: bash
         run: curl -o mingw-get.tar.xz -L -s https://osdn.mirror.constant.com//mingw/68260/mingw-get-0.6.3-mingw32-pre-20170905-1-bin.tar.xz
       - name: Install MSYS
         shell: bash
