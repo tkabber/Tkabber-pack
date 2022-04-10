@@ -72,6 +72,36 @@ find_program(TCLSH_EXE
   REQUIRED
 )
 
+function(add_project project_name url url_hash patch_command configure_command build_command dependencies_list)
+  set(${project_name}_PATCH_COMMAND ${patch_command})
+  set(${project_name}_CONFIGURE_COMMAND ${configure_command})
+  set(${project_name}_BUILD_COMMAND ${build_command})
+
+  if (MSVC)
+    set(${project_name}_PATCH_COMMAND "")
+    set(${project_name}_CONFIGURE_COMMAND "echo Configuring...")
+    set(${project_name}_BUILD_COMMAND nmake -f Makefile.vc)
+    set(${project_name}_INSTALL_COMMAND nmake -f Makefile.vc install INSTALLDIR=${CMAKE_INSTALL_PREFIX})
+    set(${project_name}_SOURCE_SUBDIR ${TCLCONFIG_DIR})
+  endif()
+
+  ExternalProject_Add(${project_name}
+    URL ${url}
+    URL_HASH SHA256=${url_hash}
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    PATCH_COMMAND ${${project_name}_PATCH_COMMAND}
+    CONFIGURE_COMMAND ${${project_name}_CONFIGURE_COMMAND}
+    BUILD_COMMAND ${${project_name}_BUILD_COMMAND}
+    BUILD_IN_SOURCE ${MSVC}
+    SOURCE_SUBDIR ${${project_name}_SOURCE_SUBDIR}
+    INSTALL_COMMAND ${${project_name}_INSTALL_COMMAND}
+    UPDATE_COMMAND ""
+    DEPENDS ${dependencies_list}
+  )
+
+endfunction()
+
+
 if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
   set(TCLCONFIG_DIR win)
   set(SNACK_CONFIG_COMMAND autoreconf -ifv <SOURCE_DIR>/${TCLCONFIG_DIR} && <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --with-tcl=<INSTALL_DIR>/lib --with-tk=<INSTALL_DIR>/lib)
@@ -80,18 +110,16 @@ else()
   set(SNACK_CONFIG_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} --with-tcl=<INSTALL_DIR>/lib --with-tk=<INSTALL_DIR>/lib)
 endif()
 
-if (NOT HOST_TRIPLET)
+if (NOT MSVC AND NOT HOST_TRIPLET)
 	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpmachine OUTPUT_VARIABLE HOST_TRIPLET OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-ExternalProject_Add(tcl
-  URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
-  URL_HASH SHA256=${TCL_HASH}
-  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  PATCH_COMMAND patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch
-  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}
-  BUILD_COMMAND ${MAKE_EXE}
-  UPDATE_COMMAND ""
+add_project(tcl
+  "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
+  ${TCL_HASH}
+  "patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch"
+  "<SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}"
+  ${MAKE_EXE}
 )
 
 if (APPLE)
@@ -99,13 +127,12 @@ set(TK_CONFIG_FLAGS --enable-aqua)
 endif()
 
 ExternalProject_Add(tk
-  URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
-  URL_HASH SHA256=${TK_HASH}
-  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
-  BUILD_COMMAND ${MAKE_EXE}
-  UPDATE_COMMAND ""
-  DEPENDS tcl
+  "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
+  ${TK_HASH}
+  ""
+  <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
+  ${MAKE_EXE}
+  "tcl"
 )
 
 ExternalProject_Add(libressl
