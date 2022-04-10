@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Prepare
-      uses: actions/checkout@v1
+      uses: actions/checkout@v3
     - name: Install dependencies
-      run: sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib
+      run: sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib wine wine-binfmt
     - name: Build
       run: |
         ./configure --host=i686-w64-mingw32
@@ -21,7 +21,7 @@ jobs:
     - name: Prepare
       uses: actions/checkout@v1
     - name: Install dependencies
-      run: sudo apt install mingw-w64 tclsh tcllib
+      run: sudo apt install mingw-w64 tclsh tcllib wine wine-binfmt
     - name: Build
       run: |
         ./configure --host=x86_64-w64-mingw32
