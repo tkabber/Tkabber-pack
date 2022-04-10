@@ -9,21 +9,3 @@
  	done
  
  collate: all
---- configure.in.orig	2013-11-21 17:03:14.000000000 -0500
-+++ configure.in	2020-01-21 06:35:16.931660226 -0500
-@@ -111,7 +111,6 @@
- TEA_CONFIG_COLLECT
- TEA_CONFIG_SUBDIR(zlib,       [--disable-option-checking])
- TEA_CONFIG_SUBDIR(libpng,     [--with-zlibtcl=`pwd`/zlib --disable-option-checking])
--TEA_CONFIG_SUBDIR(libtiff,    [--disable-option-checking])
- TEA_CONFIG_SUBDIR(libjpeg,    [--disable-option-checking])
- TEA_CONFIG_SUBDIR(base,       [--disable-option-checking])
- TEA_CONFIG_SUBDIR(bmp,        [--with-tkimg=`pwd`/base --disable-option-checking])
-@@ -126,7 +125,6 @@
- TEA_CONFIG_SUBDIR(sgi,        [--with-tkimg=`pwd`/base --disable-option-checking])
- TEA_CONFIG_SUBDIR(sun,        [--with-tkimg=`pwd`/base --disable-option-checking])
- TEA_CONFIG_SUBDIR(tga,        [--with-tkimg=`pwd`/base --disable-option-checking])
--TEA_CONFIG_SUBDIR(tiff,       [--with-tkimg=`pwd`/base --with-tifftcl=`pwd`/libtiff --with-zlibtcl=`pwd`/zlib --with-jpegtcl=`pwd`/libjpeg --disable-option-checking])
- TEA_CONFIG_SUBDIR(window,     [--with-tkimg=`pwd`/base --disable-option-checking])
- TEA_CONFIG_SUBDIR(xbm,        [--with-tkimg=`pwd`/base --disable-option-checking])
- TEA_CONFIG_SUBDIR(xpm,        [--with-tkimg=`pwd`/base --disable-option-checking])
