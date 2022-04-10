@@ -10,7 +10,7 @@ project(Tkabber LANGUAGES C)
 include(ExternalProject)
 
 if (NOT SOURCEFORGE_MIRROR)
-  set(SOURCEFORGE_MIRROR vorboss)
+  set(SOURCEFORGE_MIRROR deac-ams)
 endif()
 
 if (NOT TCLTK_VERSION)
