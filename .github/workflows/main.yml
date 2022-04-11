@@ -12,7 +12,7 @@ jobs:
       run: |
         sudo dpkg --add-architecture i386
         sudo apt update
-        sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib wine-binfmt wine32
+        sudo apt install mingw-w64 mingw-w64-i686-dev tclsh tcllib wine-binfmt wine32 libwine:i386
     - name: Build
       run: |
         ./configure --host=i686-w64-mingw32
