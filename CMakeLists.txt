@@ -114,12 +114,13 @@ if (NOT MSVC AND NOT HOST_TRIPLET)
 	execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpmachine OUTPUT_VARIABLE HOST_TRIPLET OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-add_project(tcl
-  "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
-  ${TCL_HASH}
-  "patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch"
-  "<SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}"
-  ${MAKE_EXE}
+ExternalProject_Add(tcl
+  URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tcl${TCLTK_VERSION}-src.tar.gz"
+  URL_HASH SHA256=${TCL_HASH}
+  PATCH_COMMAND "patch -d <SOURCE_DIR> -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl.patch && patch -d <SOURCE_DIR> -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/src/patches/tcl-f7fa48.patch"
+  CONFIGURE_COMMAND "<SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX}"
+  BUILD_COMMAND ${MAKE_EXE}
+  UPDATE_COMMAND ""
 )
 
 if (APPLE)
@@ -127,12 +128,12 @@ set(TK_CONFIG_FLAGS --enable-aqua)
 endif()
 
 ExternalProject_Add(tk
-  "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
-  ${TK_HASH}
-  ""
-  <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
-  ${MAKE_EXE}
-  "tcl"
+  URL "http://${SOURCEFORGE_MIRROR}.dl.sourceforge.net/sourceforge/tcl/tk${TCLTK_VERSION}-src.tar.gz"
+  URL_HASH SHA256=${TK_HASH}
+  CONFIGURE_COMMAND <SOURCE_DIR>/${TCLCONFIG_DIR}/configure --host=${HOST_TRIPLET} --prefix=${CMAKE_INSTALL_PREFIX} ${TK_CONFIG_FLAGS}
+  BUILD_COMMAND ${MAKE_EXE}
+  UPDATE_COMMAND ""
+  DEPENDS tcl
 )
 
 ExternalProject_Add(libressl
